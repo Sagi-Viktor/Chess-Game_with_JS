@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+
+{% block js %}{{ url_for('static', filename='js/login.js') }}{% endblock %}
+{% block css %}{{ url_for('static', filename='css/stylesheet.css') }}{% endblock %}
+{% block title %}login{% endblock %}
+
+{% block body %}
+<div id="login"></div>
+{% endblock %}

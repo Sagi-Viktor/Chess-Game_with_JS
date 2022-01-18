@@ -12,3 +12,17 @@ def get_users(cursor):
     """
     cursor.execute(SQL(query))
     return cursor.fetchall()
+
+
+@connection
+def login(cursor, username, password):
+    query = """
+    SELECT * FROM user_account
+    WHERE username = {username}
+     AND password = {password}
+    """
+    cursor.execute(SQL(query).format(
+        username=Literal(username),
+        password=Literal(password)
+    ))
+    return cursor.fetchone()

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- http://proger.i-forge.net/The_smallest_transparent_pixel/ -->
+    <link rel="icon" href="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=">
+    <script src="{% block js %}{% endblock %}" defer></script>
+    <link rel="stylesheet" href="{% block css %}{% endblock %}">
+    <title>Chess-{% block title %}{% endblock %}</title>
+</head>
+<body>
+<nav id="nav">
+    <div>
+        <a class="navbar">Home</a>
+    </div>
+    <div>
+        <a class="navbar" href="{{ url_for('login') }}">Login</a>
+    </div>
+</nav>
+{% block body %}{% endblock %}
+</body>
+</html>
