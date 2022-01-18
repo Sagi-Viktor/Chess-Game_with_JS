@@ -10,3 +10,8 @@ function initGame() {
     )
 
 }
+
+
+const game = {
+
+}
