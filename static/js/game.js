@@ -5,12 +5,16 @@ const game = {
         this.placingFigures()
     },
 
+    play: function () {
+        this.initStepWith();
+        this.initStepTo();
+    },
     createBoard: function () {
         let gameField = document.querySelector('.chess-board');
-        for (let rowNumber=0; rowNumber<8; rowNumber++) {
+        for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
             this.createRow(gameField, rowNumber);
             let row = document.querySelector(`[data-row="${rowNumber}"]`);
-            for (let colNumber=0; colNumber<8; colNumber++) {
+            for (let colNumber = 0; colNumber < 8; colNumber++) {
                 this.createCol(row, colNumber);
             }
         }
@@ -30,6 +34,42 @@ const game = {
         );
     },
 
+    initStepWith: function () {
+        let fields = document.querySelectorAll('.col');
+        for (let field of fields) {
+            if ("field.figure in figureValidation()") {
+                field.addEventListener('click')
+            }
+        }
+    },
+    initStepTo: function () {
+        let fields = document.querySelectorAll('.col');
+        for (let field of fields) {
+            if (field in this.stepValidation()) {
+                field.addEventListener('click', function (event) {
+                    this.switchPlayer()
+                //
+                    this.nextRound()
+                });
+            }
+        }
+    },
+    stepValidation: function () {
+        return "valid fields";
+    },
+    figureValidation: function () {
+        return "players all figure coordinates";
+    },
+    switchPlayer: function () {
+        let currentPlayer = document.querySelector('.player');
+        let playerNumber = currentPlayer.dataset['player'];
+        ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
+        currentPlayer.innerHTML = `<h3>${playerNumber}</h3>`
+    },
+    nextRound: function () {
+        game.play()
+    },
+  
     placingFigures: function (){
 
         const chessFigures = {
@@ -91,5 +131,5 @@ const game = {
 }
 
 game.init();
-
+game.play();
 
