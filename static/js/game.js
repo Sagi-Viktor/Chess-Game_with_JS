@@ -15,12 +15,14 @@ const game = {
             }
         }
     },
+  
     createRow: function (gameField, rowNumber) {
         gameField.insertAdjacentHTML(
             `beforeend`,
             `<div class="row" data-row="${rowNumber}">${rowNumber + 1}</div>`
         );
     },
+  
     createCol: function (row, colNumber) {
         row.insertAdjacentHTML(
             `beforeend`,
@@ -89,4 +91,5 @@ const game = {
 }
 
 game.init();
+
 

@@ -22,3 +22,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.black {
+    background: #4d4b4b;
+}
+
+.white {
+    background: whitesmoke;
+}
