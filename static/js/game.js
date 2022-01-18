@@ -32,7 +32,7 @@ const game = {
     createCol: function (row, colNumber) {
         row.insertAdjacentHTML(
             `beforeend`,
-            `<div class="col" data-col="${colNumber}"></div>`
+            `<div class="col" data-col="${colNumber}" data-row-value="${row.dataset.row}"></div>`
         );
     },
 
@@ -75,7 +75,7 @@ const game = {
                 let figureName = figures[number];
                 col.insertAdjacentHTML(
                     `beforeend`,
-                    `<div class="figure" data-name="${playerColor}-${figureName}" draggable="true"></div>`
+                    `<div class="figure" data-name="${playerColor}-${figureName}" data-move="0" draggable="true"></div>`
                 );
             }
         }
@@ -97,8 +97,14 @@ const game = {
         let figures = this.figureValidation()
         for (let figure of figures) {
             figure.addEventListener('click', function (event) {
-                    console.log(figure);
-                    game.stepValidation(figure);
+                let cols = document.querySelectorAll('div.col');
+                for (let col of cols) {
+                    if (col.innerHTML === figure.outerHTML) {
+                        console.log(col);
+                        game.stepValidation(figure, col);
+                    }
+
+                }
             });
 
         }
@@ -124,47 +130,65 @@ const game = {
         return figures;
     },
 
-    stepValidation: function (figure) {
+    stepValidation: function (figure, col) {
+        let figureData = {
+            fields: document.querySelectorAll('div.col'),
+            range: (figure.dataset.name.includes('black')) ? 'positive' : 'negative',
+            figure: figure,
+            row: col.dataset.rowValue,
+            col: col.dataset.col
+        }
         let figureType = figure.dataset.name
+
         let validSteps ;
-        (figureType.includes('king')) ?  validSteps = this.steps.king(figure) :
-        (figureType.includes('queen')) ? validSteps = this.steps.queen(figure) :
-        (figureType.includes('rook')) ?  validSteps = this.steps.rook(figure) :
-        (figureType.includes('bishop')) ? validSteps = this.steps.bishop(figure) :
-        (figureType.includes('knight')) ? validSteps = this.steps.knight(figure) :
-        validSteps = this.steps.pawn(figure);
+        (figureType.includes('king')) ?  validSteps = this.steps.king(figureData) :
+        (figureType.includes('queen')) ? validSteps = this.steps.queen(figureData) :
+        (figureType.includes('rook')) ?  validSteps = this.steps.rook(figureData) :
+        (figureType.includes('bishop')) ? validSteps = this.steps.bishop(figureData) :
+        (figureType.includes('knight')) ? validSteps = this.steps.knight(figureData) :
+        validSteps = this.steps.pawn(figureData);
         return validSteps;
     },
 
     steps: {
 
-        king: function (figure) {
+        king: function (figureData) {
             console.log(`Need valid moves for ${figure.dataset.name}`);
             return "valid fields"
         },
 
-        queen: function (figure) {
+        queen: function (figureData) {
             console.log(`Need valid moves for ${figure.dataset.name}`);
             return "valid fields"
         },
 
-        rook: function (figure) {
+        rook: function (figureData) {
             console.log(`Need valid moves for ${figure.dataset.name}`);
             return "valid fields"
         },
 
-        bishop: function (figure) {
+        bishop: function (figureData) {
             console.log(`Need valid moves for ${figure.dataset.name}`);
             return "valid fields"
         },
 
-        knight: function (figure) {
+        knight: function (figureData) {
             console.log(`Need valid moves for ${figure.dataset.name}`);
             return "valid fields"
         },
 
-        pawn: function (figure) {
-            console.log(`Need valid moves for ${figure.dataset.name}`);
+        pawn: function (figureData) {
+            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
+            console.log('row' + figureData.row)
+            console.log('col' + figureData.col)
+
+            let fields = document.querySelectorAll('div.col');
+            let validMoves = [];
+            if (+figureData.figure.dataset.move === 0) {
+                console.log(figureData.fields)
+                console.log(document.querySelector(`[data-col="${figureData.col}"][data-row-value="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`));
+                /////
+            }
             return "valid fields"
         }
     },
