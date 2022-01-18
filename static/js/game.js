@@ -39,7 +39,9 @@ const game = {
         let fields = document.querySelectorAll('.col');
         for (let field of fields) {
             if ("field.figure in figureValidation()") {
-                field.addEventListener('click')
+                field.addEventListener('click', function () {
+                    //
+                });
             }
         }
     },
@@ -50,7 +52,7 @@ const game = {
             if (field in this.stepValidation()) {
                 field.addEventListener('click', function (event) {
                     this.switchPlayer()
-                //
+
                     this.nextRound()
                 });
             }

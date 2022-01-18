@@ -35,7 +35,7 @@
 div[data-name*='white-pawn']{
     height: 64px;
     width: 64px;
-    background: url("../images/white_figures/white_pawn.png");
+    content: url("../images/white_figures/white_pawn.png");
     z-index: 1;
     position: absolute;
 }
