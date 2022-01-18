@@ -32,16 +32,110 @@
     background: whitesmoke;
 }
 
-div[data-name*='white-pawn']{
-    height: 64px;
-    width: 64px;
-    content: url("../images/white_figures/white_pawn.png");
-    z-index: 1;
-    position: absolute;
-}
-
 div[data-name*='black-pawn']{
     height: 64px;
     width: 64px;
     content: url("../images/black_figures/black_pawn.png");
+}
+
+div[data-name*='black-left-rook']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/black_figures/black_rook.png");
+}
+
+div[data-name*='black-right-rook']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/black_figures/black_rook.png");
+}
+
+div[data-name*='black-left-knight']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/black_figures/black_left_knight.png");
+}
+
+div[data-name*='black-right-knight']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/black_figures/black_right_knight.png");
+}
+
+div[data-name*='black-right-bishop']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/black_figures/black_bishop.png");
+}
+
+div[data-name*='black-left-bishop']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/black_figures/black_bishop.png");
+}
+
+div[data-name*='black-queen']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/black_figures/black_queen.png");
+}
+
+div[data-name*='black-king']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/black_figures/black_king.png");
+}
+
+div[data-name*='white-pawn']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/white_figures/white_pawn.png");
+}
+
+div[data-name*='white-left-rook']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/white_figures/white_rook.png");
+}
+
+div[data-name*='white-right-rook']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/white_figures/white_rook.png");
+}
+
+div[data-name*='white-right-knight']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/white_figures/white_right_knight.png");
+}
+
+div[data-name*='white-left-knight']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/white_figures/white_left_knight.png");
+}
+
+div[data-name*='white-right-bishop']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/white_figures/white_bishop.png");
+}
+
+div[data-name*='white-left-bishop']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/white_figures/white_bishop.png");
+}
+
+div[data-name*='white-queen']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/white_figures/white_queen.png");
+}
+
+div[data-name*='white-king']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/white_figures/white_king.png");
 }
