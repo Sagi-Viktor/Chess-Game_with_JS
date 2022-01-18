@@ -21,6 +21,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
 }
 
 .black {
@@ -29,4 +30,18 @@
 
 .white {
     background: whitesmoke;
+}
+
+div[data-name*='white-pawn']{
+    height: 64px;
+    width: 64px;
+    background: url("../images/white_figures/white_pawn.png");
+    z-index: 1;
+    position: absolute;
+}
+
+div[data-name*='black-pawn']{
+    height: 64px;
+    width: 64px;
+    content: url("../images/black_figures/black_pawn.png");
 }

@@ -69,7 +69,7 @@ const game = {
                 let figureName = figures[number];
                 col.insertAdjacentHTML(
                     `beforeend`,
-                    `<div class="figure" data-name="${playerColor}-${figureName}"></div>`
+                    `<div class="figure" data-name="${playerColor}-${figureName}" draggable="true"></div>`
             );
         }
         }
