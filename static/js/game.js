@@ -1,3 +1,4 @@
+
 const game = {
     init: function (){
         this.createBoard()
@@ -35,49 +36,6 @@ const game = {
         );
     },
 
-    initStepWith: function () {
-        let fields = document.querySelectorAll('.col');
-        for (let field of fields) {
-            if ("field.figure in figureValidation()") {
-                field.addEventListener('click', function () {
-                    //
-                });
-            }
-        }
-    },
-
-    initStepTo: function () {
-        let fields = document.querySelectorAll('.col');
-        for (let field of fields) {
-            if (field in this.stepValidation()) {
-                field.addEventListener('click', function (event) {
-                    this.switchPlayer()
-
-                    this.nextRound()
-                });
-            }
-        }
-    },
-
-    stepValidation: function () {
-        return "valid fields";
-    },
-
-    figureValidation: function () {
-        return "players all figure coordinates";
-    },
-
-    switchPlayer: function () {
-        let currentPlayer = document.querySelector('.player');
-        let playerNumber = currentPlayer.dataset['player'];
-        ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
-        currentPlayer.innerHTML = `<h3>${playerNumber}</h3>`
-    },
-
-    nextRound: function () {
-        game.play()
-    },
-  
     placingFigures: function (){
 
         const chessFigures = {
@@ -133,6 +91,93 @@ const game = {
 
             }
         }
+    },
+
+    initStepWith: function () {
+        let figures = this.figureValidation()
+        for (let figure of figures) {
+            figure.addEventListener('click', function (event) {
+                    console.log(figure);
+                    game.stepValidation(figure);
+            });
+
+        }
+    },
+
+    initStepTo: function () {
+        let fields = document.querySelectorAll('.col');
+        for (let field of fields) {
+            if (field in this.stepValidation()) {
+                field.addEventListener('click', function (event) {
+                    this.switchPlayer()
+
+                    this.nextRound()
+                });
+            }
+        }
+    },
+
+    figureValidation: function () {
+        let player = document.querySelector(`[data-player]`).dataset.player;
+        let playerColor = (player.includes('1')) ? 'black' : 'white';
+        let figures = document.querySelectorAll(`[data-name *="${playerColor}"]`);
+        return figures;
+    },
+
+    stepValidation: function (figure) {
+        let figureType = figure.dataset.name
+        let validSteps ;
+        (figureType.includes('king')) ?  validSteps = this.steps.king(figure) :
+        (figureType.includes('queen')) ? validSteps = this.steps.queen(figure) :
+        (figureType.includes('rook')) ?  validSteps = this.steps.rook(figure) :
+        (figureType.includes('bishop')) ? validSteps = this.steps.bishop(figure) :
+        (figureType.includes('knight')) ? validSteps = this.steps.knight(figure) :
+        validSteps = this.steps.pawn(figure);
+        return validSteps;
+    },
+
+    steps: {
+
+        king: function (figure) {
+            console.log(`Need valid moves for ${figure.dataset.name}`);
+            return "valid fields"
+        },
+
+        queen: function (figure) {
+            console.log(`Need valid moves for ${figure.dataset.name}`);
+            return "valid fields"
+        },
+
+        rook: function (figure) {
+            console.log(`Need valid moves for ${figure.dataset.name}`);
+            return "valid fields"
+        },
+
+        bishop: function (figure) {
+            console.log(`Need valid moves for ${figure.dataset.name}`);
+            return "valid fields"
+        },
+
+        knight: function (figure) {
+            console.log(`Need valid moves for ${figure.dataset.name}`);
+            return "valid fields"
+        },
+
+        pawn: function (figure) {
+            console.log(`Need valid moves for ${figure.dataset.name}`);
+            return "valid fields"
+        }
+    },
+
+    switchPlayer: function () {
+        let currentPlayer = document.querySelector('.player');
+        let playerNumber = currentPlayer.dataset['player'];
+        ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
+        currentPlayer.innerHTML = `<h3>${playerNumber}</h3>`
+    },
+
+    nextRound: function () {
+        this.play()
     }
 };
 
