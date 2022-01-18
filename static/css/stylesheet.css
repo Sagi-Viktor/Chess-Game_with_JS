@@ -11,6 +11,7 @@
 .row {
     height: 64px;
     display: flex;
+    justify-content: center;
 }
 
 .col {
@@ -20,4 +21,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+.black {
+    background: #4d4b4b;
+}
+
+.white {
+    background: whitesmoke;
 }
