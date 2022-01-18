@@ -2,6 +2,9 @@
 const game = {
 
     init: function () {
+        this.createBoard();
+    },
+    play: function () {
         this.initStepWith();
         this.initStepTo();
     },
@@ -41,6 +44,8 @@ const game = {
             if (field in this.stepValidation()) {
                 field.addEventListener('click', function (event) {
                     this.switchPlayer()
+                //
+                    this.nextRound()
                 });
             }
         }
@@ -56,5 +61,11 @@ const game = {
         let playerNumber = currentPlayer.dataset['player'];
         ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
         currentPlayer.innerHTML = `<h3>${playerNumber}</h3>`
+    },
+    nextRound: function () {
+        game.play()
     }
 }
+
+game.init();
+game.play();
