@@ -3,10 +3,10 @@ const game = {
 
     createBoard: function () {
         let gameField = document.querySelector('.chess-board');
-        for (let rowNumber=0; rowNumber<8; rowNumber++) {
+        for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
             this.createRow(gameField, rowNumber);
             let row = document.querySelector(`[data-row="${rowNumber}"]`);
-            for (let colNumber=0; colNumber<8; colNumber++) {
+            for (let colNumber = 0; colNumber < 8; colNumber++) {
                 this.createCol(row, colNumber);
             }
         }
@@ -28,6 +28,14 @@ const game = {
         for (let field of fields) {
             if ("figure is your figure") {
                 field.addEventListener('click')
+            }
+        }
+    },
+    initStepTo: function () {
+        let fields = document.querySelectorAll('.col');
+        for (let field of fields) {
+            if ("field is valid") {
+                field.addEventListener('cliclk')
             }
         }
     }
