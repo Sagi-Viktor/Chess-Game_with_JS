@@ -9,6 +9,7 @@ const game = {
         this.initStepWith();
         this.initStepTo();
     },
+
     createBoard: function () {
         let gameField = document.querySelector('.chess-board');
         for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
@@ -42,6 +43,7 @@ const game = {
             }
         }
     },
+
     initStepTo: function () {
         let fields = document.querySelectorAll('.col');
         for (let field of fields) {
@@ -54,18 +56,22 @@ const game = {
             }
         }
     },
+
     stepValidation: function () {
         return "valid fields";
     },
+
     figureValidation: function () {
         return "players all figure coordinates";
     },
+
     switchPlayer: function () {
         let currentPlayer = document.querySelector('.player');
         let playerNumber = currentPlayer.dataset['player'];
         ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
         currentPlayer.innerHTML = `<h3>${playerNumber}</h3>`
     },
+
     nextRound: function () {
         game.play()
     },
@@ -110,10 +116,9 @@ const game = {
                 col.insertAdjacentHTML(
                     `beforeend`,
                     `<div class="figure" data-name="${playerColor}-${figureName}" draggable="true"></div>`
-            );
+                );
+            }
         }
-        }
-
     },
 
     coloringBoard : function () {
@@ -125,10 +130,9 @@ const game = {
                 (colIndex % 2 === 0) ? col.classList.add(evenField) : col.classList.add(oddField);
 
             }
-
         }
     }
-}
+};
 
 game.init();
 game.play();
