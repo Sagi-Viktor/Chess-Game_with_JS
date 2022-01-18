@@ -5,7 +5,8 @@ function initGame() {
     console.log(test)
     test.insertAdjacentHTML(
         `beforebegin`,
-        `<p>HellloooooooVibes</p>`
+        ` <form 
+<p>HellloooooooVibes</p>`
     )
 
 }
