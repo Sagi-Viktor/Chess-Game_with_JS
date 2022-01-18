@@ -23,6 +23,15 @@ const game = {
             `<div class="col" data-col="${colNumber}">${colNumber}</div>`
         );
     },
+    initStepWith: function () {
+        let fields = document.querySelectorAll('.col');
+        for (let field of fields) {
+            if ("figure is your figure") {
+                field.addEventListener('click')
+            }
+        }
+    }
 }
 
 game.createBoard()
+game.gameLogic()
