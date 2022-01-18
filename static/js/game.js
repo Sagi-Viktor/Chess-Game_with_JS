@@ -36,13 +36,12 @@ const game = {
     },
 
     initStepWith: function () {
-        let fields = document.querySelectorAll('.col');
-        for (let field of fields) {
-            if ("field.figure in figureValidation()") {
-                field.addEventListener('click', function () {
-                    //
-                });
-            }
+        let figures = this.figureValidation()
+        for (let figure of figures) {
+            figure.addEventListener('click', function () {
+                    console.log(figure);
+            });
+
         }
     },
 
@@ -64,7 +63,10 @@ const game = {
     },
 
     figureValidation: function () {
-        return "players all figure coordinates";
+        let player = document.querySelector(`[data-player]`).dataset.player;
+        let playerColor = (player.includes('1')) ? 'black' : 'white';
+        let figures = document.querySelectorAll(`[data-name *="${playerColor}"]`);
+        return figures;
     },
 
     switchPlayer: function () {
