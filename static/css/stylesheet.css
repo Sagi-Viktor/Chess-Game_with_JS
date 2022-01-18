@@ -3,7 +3,7 @@
 }
 
 .chess-board{
-    margin: 0 auto;
+    margin: auto auto;
     display: flex;
     flex-direction: column;
 }
