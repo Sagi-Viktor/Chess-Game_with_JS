@@ -1,8 +1,11 @@
 nav {
     display: flex;
     justify-content: space-around;
-    background: rgba(100, 149, 237, 0.77);
-    font-size: medium;
+    font-size: 25px;
+    border-radius: 25px;
+    background: rgba(115, 173, 33, 0.36);
+    padding: 20px;
+    height: 25px;
 }
 
 #login {
@@ -48,11 +51,24 @@ nav {
 }
 
 .black-field {
-    background: #692525;
+    background: #444444;
 }
 
 .white-field {
     background: whitesmoke;
+}
+
+
+.valid-step {
+    opacity: 0.1;
+    transition: 0.2s;
+    transition-property: color;
+}
+
+.valid-step:hover {
+        color: rgb(128, 0, 0);
+    transition: 0.2s;
+    transition-property: color;
 }
 
 div[data-name*='black-pawn']{

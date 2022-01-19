@@ -129,20 +129,20 @@ const game = {
         let figureData = {
             fields: document.querySelectorAll('div.col'),
             range: (figure.dataset.name.includes('black')) ? 'positive' : 'negative',
+            type: (figure.dataset.name.includes('black')) ? 'black' : 'white',
+            enemy: (figure.dataset.name.includes('black')) ? 'white' : 'black',
             figure: figure,
             row: clickedField.dataset.row,
             col: clickedField.dataset.col
         }
         let figureType = figure.dataset.name
 
-        let validSteps ;
-        (figureType.includes('king')) ?  validSteps = this.steps.king(figureData) :
-        (figureType.includes('queen')) ? validSteps = this.steps.queen(figureData) :
-        (figureType.includes('rook')) ?  validSteps = this.steps.rook(figureData) :
-        (figureType.includes('bishop')) ? validSteps = this.steps.bishop(figureData) :
-        (figureType.includes('knight')) ? validSteps = this.steps.knight(figureData) :
-        validSteps = this.steps.pawn(figureData);
-        return validSteps;
+        (figureType.includes('king')) ?  this.steps.king(figureData) :
+        (figureType.includes('queen')) ? this.steps.queen(figureData) :
+        (figureType.includes('rook')) ?  this.steps.rook(figureData) :
+        (figureType.includes('bishop')) ? this.steps.bishop(figureData) :
+        (figureType.includes('knight')) ? this.steps.knight(figureData) :
+        this.steps.pawn(figureData);
     },
 
     steps: {
@@ -173,18 +173,21 @@ const game = {
         },
 
         pawn: function (figureData) {
-            //console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            //console.log('row' + figureData.row)
-            //console.log('col' + figureData.col)
-
-            let fields = document.querySelectorAll('div.col');
-            let validMoves = [];
-            if (+figureData.figure.dataset.move === 0) {
-                //console.log(figureData.fields)
-                console.log(document.querySelector(`[data-col="${figureData.col}"][data-row-value="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`));
-                /////
+            let validRow = document.querySelectorAll(`[data-row="${(figureData.range === 'positive') ? +figureData.row + 1 : +figureData.row - 1}"]`);
+            let [figFront, figFrontLeft, figFrontRight] = [validRow[+figureData.col], validRow[+figureData.col - 1], validRow[+figureData.col + 1]];
+            if (figFront.classList.contains('empty')) {
+                figFront.classList.add('valid-step');
+                if (+figureData.figure.dataset.move === 0) {
+                    let validStep = document.querySelector(`[data-col="${figureData.col}"][data-row="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`);
+                    validStep.classList.add('valid-step');
+                }
             }
-            return "valid fields"
+            if (figFrontLeft && figFrontLeft.classList.contains(`${figureData.enemy}-fig-on`)) {
+                    figFrontLeft.classList.add('valid-step');
+                }
+            if (figFrontRight && figFrontRight.classList.contains(`${figureData.enemy}-fig-on`)) {
+                    figFrontRight.classList.add('valid-step');
+            }
         }
     },
 
