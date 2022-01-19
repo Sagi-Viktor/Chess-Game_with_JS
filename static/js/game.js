@@ -130,12 +130,13 @@ const game = {
             fields: document.querySelectorAll('div.col'),
             range: (figure.dataset.name.includes('black')) ? 'positive' : 'negative',
             type: (figure.dataset.name.includes('black')) ? 'black' : 'white',
-            enemy: (figure.dataset.name.includes('black')) ? 'white' : 'black',
+            enemy: (figure.classList.contains('black-fig-on')) ? 'white-fig-on' : 'black-fig-on',
             figure: figure,
             row: clickedField.dataset.row,
             col: clickedField.dataset.col
         }
-        let figureType = figure.dataset.name
+        debugger;
+        let figureType = figure.dataset.name;
 
         (figureType.includes('king')) ?  this.steps.king(figureData) :
         (figureType.includes('queen')) ? this.steps.queen(figureData) :
@@ -182,10 +183,10 @@ const game = {
                     validStep.classList.add('valid-step');
                 }
             }
-            if (figFrontLeft && figFrontLeft.classList.contains(`${figureData.enemy}-fig-on`)) {
+            if (figFrontLeft && figFrontLeft.classList.contains(figureData.enemy)) {
                     figFrontLeft.classList.add('valid-step');
                 }
-            if (figFrontRight && figFrontRight.classList.contains(`${figureData.enemy}-fig-on`)) {
+            if (figFrontRight && figFrontRight.classList.contains(figureData.enemy)) {
                     figFrontRight.classList.add('valid-step');
             }
         }
