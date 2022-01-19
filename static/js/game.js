@@ -65,9 +65,9 @@ const game = {
         let rowOfWhiteFigures = document.querySelectorAll(`[data-row-container="6"] .col`);
         let rowOfWhitePawns = document.querySelectorAll(`[data-row-container="7"] .col`);
 
-        iteratingRows(rowOfBlackFigures, chessFigures, "black");
-        iteratingRows(rowOfBlackPawns, chessPawns, "black");
-        iteratingRows(rowOfWhiteFigures, chessPawns, "white");
+        // iteratingRows(rowOfBlackFigures, chessFigures, "black");
+        // iteratingRows(rowOfBlackPawns, chessPawns, "black");
+        // iteratingRows(rowOfWhiteFigures, chessPawns, "white");
         iteratingRows(rowOfWhitePawns, chessFigures, "white");
 
         function iteratingRows(row, figures, playerColor){
@@ -129,20 +129,21 @@ const game = {
         let figureData = {
             fields: document.querySelectorAll('div.col'),
             range: (figure.dataset.name.includes('black')) ? 'positive' : 'negative',
+            type: (figure.dataset.name.includes('black')) ? 'black' : 'white',
+            enemy: (figure.classList.contains('black-fig-on')) ? 'white-fig-on' : 'black-fig-on',
             figure: figure,
             row: clickedField.dataset.row,
-            col: clickedField.dataset.col
+            col: clickedField.dataset.col,
+            currentColumn: clickedField
         }
-        let figureType = figure.dataset.name
+        let figureType = figure.dataset.name;
 
-        let validSteps ;
-        (figureType.includes('king')) ?  validSteps = this.steps.king(figureData) :
-        (figureType.includes('queen')) ? validSteps = this.steps.queen(figureData) :
-        (figureType.includes('rook')) ?  validSteps = this.steps.rook(figureData) :
-        (figureType.includes('bishop')) ? validSteps = this.steps.bishop(figureData) :
-        (figureType.includes('knight')) ? validSteps = this.steps.knight(figureData) :
-        validSteps = this.steps.pawn(figureData);
-        return validSteps;
+        (figureType.includes('king')) ?  this.steps.king(figureData) :
+        (figureType.includes('queen')) ? this.steps.queen(figureData) :
+        (figureType.includes('rook')) ?  this.steps.rook(figureData) :
+        (figureType.includes('bishop')) ? this.steps.bishop(figureData) :
+        (figureType.includes('knight')) ? this.steps.knight(figureData) :
+        this.steps.pawn(figureData);
     },
 
     steps: {
@@ -163,22 +164,41 @@ const game = {
         },
 
         bishop: function (figureData) {
-            // console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            // return "valid fields"
-            console.log(figureData.row)
-            console.log(figureData)
-            let row = figureData.row
-            let col = figureData.col
-            let fields = document.querySelectorAll('div.col');
-            let rows = document.querySelectorAll('div.row');
-            this.validation([row, col], '++')
-            console.log(figureData);
-            console.log(fields[4]);
+            let row = figureData.row;
+            let col = figureData.col;
+            // debugger;
+            let currentField = ((+row) * 8) + +col
+            let direction = -7
+            let mathCoefficient = 0
+            let originalField = currentField
+            this.validation(currentField, direction, figureData.fields, figureData, mathCoefficient, originalField);
         },
-        validation: function(currentField, direction, fields, figureData) {
+
+        validation: function(currentField, direction, fields, figureData, mathCoefficient, originalField) {
             let newField = currentField + direction;
-            if (newField <= 63 && newField >=0){
-                fields[newField].classList.contains(figureData.enemy)
+            console.log(`direction in validation ------------    ${direction}`)
+            // console.log(fields[newField])
+            if ((newField <= 63 && newField >=0) && (newField % 8 !== mathCoefficient)) { // mathCoefficient == 0, 7,
+                // console.log('ifben van')
+                if (fields[newField].classList.contains(figureData.enemy)) {
+                    // console.log('ifben van')
+                    fields[newField].classList.add('valid-step');
+                } else {
+                    // console.log('elsebenben van')
+                    fields[newField].classList.add('valid-step');
+                    this.validation(newField, direction, fields, figureData, mathCoefficient, originalField);
+                }
+            }
+            // console.log('kilépett az ifből')
+            let newDirection;
+            (direction === 7) ? newDirection = 9 : (direction === 9) ? newDirection = 7 : (direction === -7) ? newDirection = -9 : newDirection = 0;
+            ((direction === -9) || (direction === 9)) ? mathCoefficient = 7 : ((direction === -7) || (direction === 7)) ? mathCoefficient = 0 : direction = 0;
+
+            if (direction !== 0) {
+                currentField = originalField
+                this.validation(currentField, newDirection, fields, figureData, mathCoefficient, originalField);
+            } else if (direction === 0){
+                console.log('kaki')
             }
         },
 
@@ -217,4 +237,3 @@ const game = {
 
 game.init();
 game.play();
-
