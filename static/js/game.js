@@ -8,7 +8,7 @@ const game = {
 
     play: function () {
         this.initStepWith();
-        this.initStepTo();
+
     },
 
     createBoard: function () {
@@ -96,26 +96,62 @@ const game = {
     },
 
     initStepWith: function () {
-        let figures = this.figureValidation()
+        let figures = this.figureValidation();
         for (let figure of figures) {
-            figure.addEventListener('click', function (event) {
-                let clickedField = event.currentTarget.parentNode;
-                game.stepValidation(figure, clickedField)
-            });
+            figure.addEventListener('click', this.initValidStepClick_1);
+        }
+    },
+
+    initValidStepClick_1: function (event) {
+        game.clearStepFields(document.querySelectorAll('.col')); // deletes the valid moves
+        let figure = event.currentTarget;
+        figure.setAttribute('data-clicked', 'true');
+        let clickedField = event.currentTarget.parentNode;
+        game.stepValidation(figure, clickedField)
+    },
+
+
+    removeInitStepWith_1: function () {
+        let figures = this.figureValidation();
+        for (let figure of figures) {
+            figure.removeEventListener('click', this.initValidStepClick_1);
         }
     },
 
     initStepTo: function () {
-        let fields = document.querySelectorAll('.col');
-        for (let field of fields) {
-            if (field in this.stepValidation()) {
-                field.addEventListener('click', function (event) {
-                    this.switchPlayer()
-
-                    this.nextRound()
-                });
-            }
+        this.initRemoveValidMoveClick_2()
+        let fields = document.querySelectorAll('.valid-step');
+        console.log(fields)
+        for (let stepField of fields) {
+            stepField.addEventListener('click', this.initValidMoveClick_2);
         }
+
+    },
+
+    initValidMoveClick_2: function (event) {
+        let stepField = event.currentTarget;
+        let fields = document.querySelectorAll('.valid-step');
+        game.step(stepField);
+        game.clearStepFields(fields);
+        console.log('JEEEEEEEE')
+
+        //this.switchPlayer()
+        //this.nextRound()
+    },
+
+    initRemoveValidMoveClick_2: function() {
+        let fields = document.querySelectorAll('.col');
+        console.log(fields)
+        for (let stepField of fields) {
+            stepField.removeEventListener('click', this.initValidMoveClick_2);
+        }
+    },
+
+    clearStepFields: function (fields) {
+        for (let field of fields) field.classList.remove('valid-step');
+        this.initRemoveValidMoveClick_2();
+        //for (let field of fields) field.replaceWith(field.cloneNode(true));
+
     },
 
     figureValidation: function () {
@@ -129,20 +165,23 @@ const game = {
         let figureData = {
             fields: document.querySelectorAll('div.col'),
             range: (figure.dataset.name.includes('black')) ? 'positive' : 'negative',
+            type: (figure.dataset.name.includes('black')) ? 'black' : 'white',
+            enemy: (figure.classList.contains('black-fig-on')) ? 'white-fig-on' : 'black-fig-on',
             figure: figure,
             row: clickedField.dataset.row,
-            col: clickedField.dataset.col
+            col: clickedField.dataset.col,
+            currentColumn: clickedField
         }
-        let figureType = figure.dataset.name
+        let figureType = figure.dataset.name;
 
-        let validSteps ;
-        (figureType.includes('king')) ?  validSteps = this.steps.king(figureData) :
-        (figureType.includes('queen')) ? validSteps = this.steps.queen(figureData) :
-        (figureType.includes('rook')) ?  validSteps = this.steps.rook(figureData) :
-        (figureType.includes('bishop')) ? validSteps = this.steps.bishop(figureData) :
-        (figureType.includes('knight')) ? validSteps = this.steps.knight(figureData) :
-        validSteps = this.steps.rook(figureData);
-        return validSteps;
+        (figureType.includes('king')) ?  this.steps.king(figureData) :
+        (figureType.includes('queen')) ? this.steps.queen(figureData) :
+        (figureType.includes('rook')) ?  this.steps.rook(figureData) :
+        (figureType.includes('bishop')) ? this.steps.bishop(figureData) :
+        (figureType.includes('knight')) ? this.steps.knight(figureData) :
+        this.steps.pawn(figureData);
+        this.initStepTo()
+      
     },
 
     steps: {
@@ -189,32 +228,68 @@ const game = {
         },
 
         bishop: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+            let row = figureData.row;
+            let col = figureData.col;
+            let currentField = ((+row) * 8) + +col
+            let direction = -7
+            let mathCoefficient = 0
+            let originalField = currentField
+            this.validation(currentField, direction, figureData.fields, figureData, mathCoefficient, originalField);
+        },
+
+        validation: function(currentField, direction, fields, figureData, mathCoefficient, originalField) {
+            if (direction === 0) return;
+            let newField = currentField + direction;
+            if ((newField <= 63 && newField >=0) && (newField % 8 !== mathCoefficient)) { // mathCoefficient == 0, 7,
+                if (fields[newField].classList.contains(figureData.enemy)) {
+                    fields[newField].classList.add('valid-step');
+                } else {
+                    fields[newField].classList.add('valid-step');
+                    this.validation(newField, direction, fields, figureData, mathCoefficient, originalField);
+                }
+            }
+            let newDirection;
+            (direction === 7) ? newDirection = 9 : (direction === 9) ? newDirection = 7 : (direction === -7) ? newDirection = -9 : newDirection = 0;
+            ((direction === -9) || (direction === 9)) ? mathCoefficient = 7 : ((direction === -7) || (direction === 7)) ? mathCoefficient = 0 : direction = 0;
+            if (direction !== 0) {
+                currentField = originalField
+                this.validation(currentField, newDirection, fields, figureData, mathCoefficient, originalField);
+            }
         },
 
         knight: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+
+            return "add valid-step class to valid fields"
         },
 
         pawn: function (figureData) {
-            //console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            //console.log('row' + figureData.row)
-            //console.log('col' + figureData.col)
-
-            let fields = document.querySelectorAll('div.col');
-            let validMoves = [];
-            if (+figureData.figure.dataset.move === 0) {
-                //console.log(figureData.fields)
-                console.log(document.querySelector(`[data-col="${figureData.col}"][data-row-value="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`));
-                /////
+            let validRow = document.querySelectorAll(`[data-row="${(figureData.range === 'positive') ? +figureData.row + 1 : +figureData.row - 1}"]`);
+            let [figFront, figFrontLeft, figFrontRight] = [validRow[+figureData.col], validRow[+figureData.col - 1], validRow[+figureData.col + 1]];
+            if (figFront.classList.contains('empty')) {
+                figFront.classList.add('valid-step');
+                if (+figureData.figure.dataset.move === 0) {
+                    let validStep = document.querySelector(`[data-col="${figureData.col}"][data-row="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`);
+                    validStep.classList.add('valid-step');
+                }
             }
-            return "valid fields"
+            if (figFrontLeft && figFrontLeft.classList.contains(figureData.enemy)) {
+                    figFrontLeft.classList.add('valid-step');
+                }
+            if (figFrontRight && figFrontRight.classList.contains(figureData.enemy)) {
+                    figFrontRight.classList.add('valid-step');
+            }
         }
     },
 
+    step: function (stepField) {
+        let figure = document.querySelector(`[data-clicked="true"]`);
+        stepField.innerHTML = figure.outerHTML;
+        figure.remove();
+        stepField.querySelector('div').removeAttribute('data-clicked');
+    },
+
     switchPlayer: function () {
+        game.removeInitStepWith_1()
         let currentPlayer = document.querySelector('.player');
         let playerNumber = currentPlayer.dataset['player'];
         ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
@@ -228,4 +303,3 @@ const game = {
 
 game.init();
 game.play();
-
