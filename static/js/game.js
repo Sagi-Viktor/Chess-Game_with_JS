@@ -77,10 +77,18 @@ const game = {
                     `beforeend`,
                     `<div class="figure" data-name="${playerColor}-${figureName}" data-move="0" draggable="true"></div>`
                 );
+
                 col.classList.remove('empty');
                 col.classList.add(`${playerColor}-fig-on`);
             }
         }
+        // let rookField = document.querySelector(`[data-row="4"][data-col="3"]`);
+        // rookField.insertAdjacentHTML(
+        //         `beforeend`,
+        //         `<div class="figure" data-name="white-left-rook" data-move="0" draggable="true"></div>`
+        //     );
+        // rookField.classList.remove('empty');
+        // rookField.classList.add(`white-fig-on`);
     },
 
     coloringBoard : function () {
@@ -186,45 +194,61 @@ const game = {
 
     steps: {
 
+        checkAround: function (firstCoordinate, secCoordinate, rowDirection, direction, figure){
+                if (secCoordinate >= 0 || secCoordinate <= 7){
+                    if (checkValidDirection(secCoordinate, direction)) {
+                        if (checkValidDirection(firstCoordinate, rowDirection)){
+                            let nextField = document.querySelector(`[data-row="${firstCoordinate + rowDirection}"][data-col="${secCoordinate + direction}"]`);
+                            if (nextField === null) return;
+                            if (nextField.classList.contains('empty')) {
+                                nextField.classList.add('valid-step');
+                                if (figure === 'knight') return;
+                                this.checkAround(firstCoordinate+rowDirection, secCoordinate + direction, rowDirection, direction);
+                            }// itt kell checkkolni a nem üres mezőt, hogy fehér vagy fekete áll rajta
+                            //
+                            //}
+                        }
+                    }
+                }
+
+                function checkValidDirection(coordinate, direction){
+                if (coordinate + direction > 7 || coordinate + direction < 0){
+                    return false;
+                } else {return true}
+            }
+        },
+
         king: function (figureData) {
             console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
             return "valid fields"
         },
 
         queen: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+            let clickedCol = +figureData.col;
+            let clickedRow = +figureData.row;
+            this.checkAround(clickedRow, clickedCol, 0, +1);
+            this.checkAround(clickedRow, clickedCol, +1, 0);
+            this.checkAround(clickedRow, clickedCol, -1, 0);
+            this.checkAround(clickedRow, clickedCol, 0, -1);
+            this.checkAround(clickedRow, clickedCol, +1, +1);
+            this.checkAround(clickedRow, clickedCol, -1, -1);
+            this.checkAround(clickedRow, clickedCol, -1, +1);
+            this.checkAround(clickedRow, clickedCol, +1, -1);
         },
 
         rook: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            console.log(figureData)
-            let clickedRow = +figureData.row;
             let clickedCol = +figureData.col;
-            checkAround(clickedRow, clickedCol, 0, +1)
-            checkAround(clickedRow, clickedCol, +1, 0)
+            let clickedRow = +figureData.row;
 
-            function checkAround(firstCoordinate, secCoordinate, rowDirection, direction){
-                if (secCoordinate >= 0 || secCoordinate <= 7){
-                    if (checkValidDirection(secCoordinate, direction)) {
-                        if (checkValidDirection(firstCoordinate, rowDirection)){
-                            let nextField = document.querySelector(`[data-row="${firstCoordinate + rowDirection}"][data-col="${secCoordinate + direction}"]`);
-                            if (nextField.classList.contains('empty')) {
-                                nextField.classList.add('valid-step')
-                                checkAround(firstCoordinate+rowDirection, secCoordinate + direction, rowDirection, direction)
-                            }// itt kell checkkolni a nem üres mezőt, hogy fehér vagy fekete áll rajta
-                            //
-                            //}
-                        }else {checkAround(firstCoordinate, secCoordinate, -rowDirection, direction)}
-                    } else { checkAround(firstCoordinate, secCoordinate, rowDirection, -direction)}
-                } else {checkAround(secCoordinate+direction, firstCoordinate, direction)}
-            }
-
-            function checkValidDirection(coordinate, direction){
-                if (coordinate + direction > 7 || coordinate - direction < 0){
-                    return false
-                } else {return true}
-            }
+            this.checkAround(clickedRow, clickedCol, 0, +1);
+            this.checkAround(clickedRow, clickedCol, +1, 0);
+            this.checkAround(clickedRow, clickedCol, -1, 0);
+            this.checkAround(clickedRow, clickedCol, 0, -1);
+            // //bishop
+            // checkAround(clickedRow, clickedCol, +1, +1)
+            // checkAround(clickedRow, clickedCol, -1, -1)
+            // checkAround(clickedRow, clickedCol, -1, +1)
+            // checkAround(clickedRow, clickedCol, +1, -1)
         },
 
         bishop: function (figureData) {
@@ -258,8 +282,18 @@ const game = {
         },
 
         knight: function (figureData) {
+            let clickedCol = +figureData.col;
+            let clickedRow = +figureData.row;
 
-            return "add valid-step class to valid fields"
+            this.checkAround(clickedRow, clickedCol, +1, +2, 'knight')
+            this.checkAround(clickedRow, clickedCol, +1, -2, 'knight')
+            this.checkAround(clickedRow, clickedCol, +2, -1, 'knight')
+            this.checkAround(clickedRow, clickedCol, +2, +1, 'knight')
+            this.checkAround(clickedRow, clickedCol, -1, -2, 'knight')
+            this.checkAround(clickedRow, clickedCol, -1, +2, 'knight')
+            this.checkAround(clickedRow, clickedCol, -2, +1, 'knight')
+            this.checkAround(clickedRow, clickedCol, -2, -1, 'knight')
+
         },
 
         pawn: function (figureData) {
