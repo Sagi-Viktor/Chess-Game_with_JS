@@ -181,6 +181,7 @@ const game = {
         (figureType.includes('knight')) ? this.steps.knight(figureData) :
         this.steps.pawn(figureData);
         this.initStepTo()
+      
     },
 
     steps: {
@@ -197,7 +198,33 @@ const game = {
 
         rook: function (figureData) {
             console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+            console.log(figureData)
+            let clickedRow = +figureData.row;
+            let clickedCol = +figureData.col;
+            checkAround(clickedRow, clickedCol, 0, +1)
+            checkAround(clickedRow, clickedCol, +1, 0)
+
+            function checkAround(firstCoordinate, secCoordinate, rowDirection, direction){
+                if (secCoordinate >= 0 || secCoordinate <= 7){
+                    if (checkValidDirection(secCoordinate, direction)) {
+                        if (checkValidDirection(firstCoordinate, rowDirection)){
+                            let nextField = document.querySelector(`[data-row="${firstCoordinate + rowDirection}"][data-col="${secCoordinate + direction}"]`);
+                            if (nextField.classList.contains('empty')) {
+                                nextField.classList.add('valid-step')
+                                checkAround(firstCoordinate+rowDirection, secCoordinate + direction, rowDirection, direction)
+                            }// itt kell checkkolni a nem üres mezőt, hogy fehér vagy fekete áll rajta
+                            //
+                            //}
+                        }else {checkAround(firstCoordinate, secCoordinate, -rowDirection, direction)}
+                    } else { checkAround(firstCoordinate, secCoordinate, rowDirection, -direction)}
+                } else {checkAround(secCoordinate+direction, firstCoordinate, direction)}
+            }
+
+            function checkValidDirection(coordinate, direction){
+                if (coordinate + direction > 7 || coordinate - direction < 0){
+                    return false
+                } else {return true}
+            }
         },
 
         bishop: function (figureData) {
