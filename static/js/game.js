@@ -65,9 +65,9 @@ const game = {
         let rowOfWhiteFigures = document.querySelectorAll(`[data-row-container="6"] .col`);
         let rowOfWhitePawns = document.querySelectorAll(`[data-row-container="7"] .col`);
 
-        // iteratingRows(rowOfBlackFigures, chessFigures, "black");
+        iteratingRows(rowOfBlackFigures, chessFigures, "black");
         // iteratingRows(rowOfBlackPawns, chessPawns, "black");
-        // iteratingRows(rowOfWhiteFigures, chessPawns, "white");
+        iteratingRows(rowOfWhiteFigures, chessPawns, "white");
         iteratingRows(rowOfWhitePawns, chessFigures, "white");
 
         function iteratingRows(row, figures, playerColor){
@@ -166,7 +166,6 @@ const game = {
         bishop: function (figureData) {
             let row = figureData.row;
             let col = figureData.col;
-            // debugger;
             let currentField = ((+row) * 8) + +col
             let direction = -7
             let mathCoefficient = 0
@@ -176,29 +175,23 @@ const game = {
 
         validation: function(currentField, direction, fields, figureData, mathCoefficient, originalField) {
             let newField = currentField + direction;
-            console.log(`direction in validation ------------    ${direction}`)
-            // console.log(fields[newField])
+            console.log(`direction in validation ------ ${direction}`)
             if ((newField <= 63 && newField >=0) && (newField % 8 !== mathCoefficient)) { // mathCoefficient == 0, 7,
-                // console.log('ifben van')
                 if (fields[newField].classList.contains(figureData.enemy)) {
-                    // console.log('ifben van')
                     fields[newField].classList.add('valid-step');
                 } else {
-                    // console.log('elsebenben van')
                     fields[newField].classList.add('valid-step');
                     this.validation(newField, direction, fields, figureData, mathCoefficient, originalField);
                 }
             }
-            // console.log('kilépett az ifből')
             let newDirection;
             (direction === 7) ? newDirection = 9 : (direction === 9) ? newDirection = 7 : (direction === -7) ? newDirection = -9 : newDirection = 0;
-            ((direction === -9) || (direction === 9)) ? mathCoefficient = 7 : ((direction === -7) || (direction === 7)) ? mathCoefficient = 0 : direction = 0;
-
+            ((direction === -9) || (direction === 9)) ? mathCoefficient = 0 : ((direction === -7) || (direction === 7)) ? mathCoefficient = 7 : direction = 0;
             if (direction !== 0) {
                 currentField = originalField
                 this.validation(currentField, newDirection, fields, figureData, mathCoefficient, originalField);
             } else if (direction === 0){
-                console.log('kaki')
+                console.log('end')
             }
         },
 
