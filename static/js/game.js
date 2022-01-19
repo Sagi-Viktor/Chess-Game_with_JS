@@ -67,7 +67,7 @@ const game = {
 
         iteratingRows(rowOfBlackFigures, chessFigures, "black");
         // iteratingRows(rowOfBlackPawns, chessPawns, "black");
-        iteratingRows(rowOfWhiteFigures, chessPawns, "white");
+        // iteratingRows(rowOfWhiteFigures, chessPawns, "white");
         iteratingRows(rowOfWhitePawns, chessFigures, "white");
 
         function iteratingRows(row, figures, playerColor){
@@ -164,35 +164,13 @@ const game = {
         },
 
         bishop: function (figureData) {
-            let row = figureData.row;
-            let col = figureData.col;
-            let currentField = ((+row) * 8) + +col
-            let direction = -7
-            let mathCoefficient = 0
-            let originalField = currentField
-            this.validation(currentField, direction, figureData.fields, figureData, mathCoefficient, originalField);
-        },
-
-        validation: function(currentField, direction, fields, figureData, mathCoefficient, originalField) {
-            let newField = currentField + direction;
-            console.log(`direction in validation ------ ${direction}`)
-            if ((newField <= 63 && newField >=0) && (newField % 8 !== mathCoefficient)) { // mathCoefficient == 0, 7,
-                if (fields[newField].classList.contains(figureData.enemy)) {
-                    fields[newField].classList.add('valid-step');
-                } else {
-                    fields[newField].classList.add('valid-step');
-                    this.validation(newField, direction, fields, figureData, mathCoefficient, originalField);
-                }
-            }
-            let newDirection;
-            (direction === 7) ? newDirection = 9 : (direction === 9) ? newDirection = 7 : (direction === -7) ? newDirection = -9 : newDirection = 0;
-            ((direction === -9) || (direction === 9)) ? mathCoefficient = 0 : ((direction === -7) || (direction === 7)) ? mathCoefficient = 7 : direction = 0;
-            if (direction !== 0) {
-                currentField = originalField
-                this.validation(currentField, newDirection, fields, figureData, mathCoefficient, originalField);
-            } else if (direction === 0){
-                console.log('end')
-            }
+            let clickedCol = +figureData.col;
+            let clickedRow = +figureData.row;
+            let figure = 'bishop'
+            this.checkAround(clickedRow, clickedCol, +1, +1, figure);
+            this.checkAround(clickedRow, clickedCol, -1, -1, figure);
+            this.checkAround(clickedRow, clickedCol, -1, +1, figure);
+            this.checkAround(clickedRow, clickedCol, +1, -1, figure);
         },
 
         knight: function (figureData) {
