@@ -169,9 +169,11 @@ const game = {
             enemy: (figure.classList.contains('black-fig-on')) ? 'white-fig-on' : 'black-fig-on',
             figure: figure,
             row: clickedField.dataset.row,
-            col: clickedField.dataset.col
+            col: clickedField.dataset.col,
+            currentColumn: clickedField
         }
         let figureType = figure.dataset.name;
+
         (figureType.includes('king')) ?  this.steps.king(figureData) :
         (figureType.includes('queen')) ? this.steps.queen(figureData) :
         (figureType.includes('rook')) ?  this.steps.rook(figureData) :
@@ -199,13 +201,37 @@ const game = {
         },
 
         bishop: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+            let row = figureData.row;
+            let col = figureData.col;
+            let currentField = ((+row) * 8) + +col
+            let direction = -7
+            let mathCoefficient = 0
+            let originalField = currentField
+            this.validation(currentField, direction, figureData.fields, figureData, mathCoefficient, originalField);
+        },
+
+        validation: function(currentField, direction, fields, figureData, mathCoefficient, originalField) {
+            let newField = currentField + direction;
+            if ((newField <= 63 && newField >=0) && (newField % 8 !== mathCoefficient)) { // mathCoefficient == 0, 7,
+                if (fields[newField].classList.contains(figureData.enemy)) {
+                    fields[newField].classList.add('valid-step');
+                } else {
+                    fields[newField].classList.add('valid-step');
+                    this.validation(newField, direction, fields, figureData, mathCoefficient, originalField);
+                }
+            }
+            let newDirection;
+            (direction === 7) ? newDirection = 9 : (direction === 9) ? newDirection = 7 : (direction === -7) ? newDirection = -9 : newDirection = 0;
+            ((direction === -9) || (direction === 9)) ? mathCoefficient = 7 : ((direction === -7) || (direction === 7)) ? mathCoefficient = 0 : direction = 0;
+            if (direction !== 0) {
+                currentField = originalField
+                this.validation(currentField, newDirection, fields, figureData, mathCoefficient, originalField);
+            }
         },
 
         knight: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+
+            return "add valid-step class to valid fields"
         },
 
         pawn: function (figureData) {
@@ -251,4 +277,3 @@ const game = {
 
 game.init();
 game.play();
-
