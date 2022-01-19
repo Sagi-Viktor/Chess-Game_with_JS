@@ -67,7 +67,7 @@ const game = {
 
         iteratingRows(rowOfBlackFigures, chessFigures, "black");
         iteratingRows(rowOfBlackPawns, chessPawns, "black");
-        //iteratingRows(rowOfWhiteFigures, chessPawns, "white");
+        iteratingRows(rowOfWhiteFigures, chessPawns, "white");
         iteratingRows(rowOfWhitePawns, chessFigures, "white");
 
         function iteratingRows(row, figures, playerColor){
@@ -162,15 +162,9 @@ const game = {
             console.log(figureData)
             let clickedRow = +figureData.row;
             let clickedCol = +figureData.col;
-            debugger;
-
-
-
             checkAround(clickedRow, clickedCol, 0, +1)
             checkAround(clickedRow, clickedCol, +1, 0)
-            // checkAround(clickedCol, clickedRow, +1)
-            // checkAround(clickedCol, clickedRow, -1)
-            console.log(typeof clickedCol, clickedRow)
+
             function checkAround(firstCoordinate, secCoordinate, rowDirection, direction){
                 if (secCoordinate >= 0 || secCoordinate <= 7){
                     if (checkValidDirection(secCoordinate, direction)) {
