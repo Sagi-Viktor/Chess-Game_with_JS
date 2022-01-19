@@ -1,3 +1,26 @@
+nav {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(100, 149, 237, 0.77);
+    font-size: medium;
+}
+
+#login {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+
 .head{
     color: #177199;
 }
@@ -24,11 +47,11 @@
 
 }
 
-.black {
-    background: #4d4b4b;
+.black-field {
+    background: #692525;
 }
 
-.white {
+.white-field {
     background: whitesmoke;
 }
 
