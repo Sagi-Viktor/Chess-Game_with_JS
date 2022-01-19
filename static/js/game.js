@@ -108,11 +108,11 @@ const game = {
     initStepTo: function () {
         let fields = document.querySelectorAll('.col');
         for (let field of fields) {
-            if (field in this.stepValidation()) {
+            if (1==1) {
                 field.addEventListener('click', function (event) {
-                    this.switchPlayer()
-
-                    this.nextRound()
+                    // this.switchPlayer()
+                    //
+                    // this.nextRound()
                 });
             }
         }
@@ -163,13 +163,28 @@ const game = {
         },
 
         bishop: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+            // console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
+            // return "valid fields"
+            console.log(figureData.row)
+            console.log(figureData)
+            let row = figureData.row
+            let col = figureData.col
+            let fields = document.querySelectorAll('div.col');
+            let rows = document.querySelectorAll('div.row');
+            this.validation([row, col], '++')
+            console.log(figureData);
+            console.log(fields[4]);
+        },
+        validation: function(currentField, direction, fields, figureData) {
+            let newField = currentField + direction;
+            if (newField <= 63 && newField >=0){
+                fields[newField].classList.contains(figureData.enemy)
+            }
         },
 
         knight: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+
+            return "add valid-step class to valid fields"
         },
 
         pawn: function (figureData) {
