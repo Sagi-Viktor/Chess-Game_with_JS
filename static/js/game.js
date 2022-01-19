@@ -211,6 +211,7 @@ const game = {
         },
 
         validation: function(currentField, direction, fields, figureData, mathCoefficient, originalField) {
+            if (direction === 0) return;
             let newField = currentField + direction;
             if ((newField <= 63 && newField >=0) && (newField % 8 !== mathCoefficient)) { // mathCoefficient == 0, 7,
                 if (fields[newField].classList.contains(figureData.enemy)) {
@@ -258,8 +259,6 @@ const game = {
         stepField.innerHTML = figure.outerHTML;
         figure.remove();
         stepField.querySelector('div').removeAttribute('data-clicked');
-
-
     },
 
     switchPlayer: function () {
