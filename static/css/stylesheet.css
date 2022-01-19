@@ -60,9 +60,9 @@ nav {
 
 
 .valid-step {
-    opacity: 0.1;
+    background-color: aqua;
     transition: 0.2s;
-    transition-property: color;
+    transition-property: background-color;
 }
 
 .valid-step:hover {
