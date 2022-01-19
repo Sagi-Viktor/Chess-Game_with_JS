@@ -1,6 +1,6 @@
 const container = document.querySelector('div#login');
 container.innerHTML = `
-<form method="post">
+<form id="login-form" method="post">
     <label for="username">Username</label>
     <input name="username" id="username" type="text" placeholder="Enter Your username">
     <label for="password">Password</label>
