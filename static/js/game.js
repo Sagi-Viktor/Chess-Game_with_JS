@@ -77,10 +77,18 @@ const game = {
                     `beforeend`,
                     `<div class="figure" data-name="${playerColor}-${figureName}" data-move="0" draggable="true"></div>`
                 );
+
                 col.classList.remove('empty');
                 col.classList.add(`${playerColor}-fig-on`);
             }
         }
+        // let rookField = document.querySelector(`[data-row="4"][data-col="3"]`);
+        // rookField.insertAdjacentHTML(
+        //         `beforeend`,
+        //         `<div class="figure" data-name="white-queen" data-move="0" draggable="true"></div>`
+        //     );
+        // rookField.classList.remove('empty');
+        // rookField.classList.add(`white-fig-on`);
     },
 
     coloringBoard : function () {
@@ -138,29 +146,70 @@ const game = {
         }
         let figureType = figure.dataset.name;
 
-        (figureType.includes('king')) ?  this.steps.king(figureData) :
-        (figureType.includes('queen')) ? this.steps.queen(figureData) :
+        (figureType.includes('king')) ?  this.steps.royalFamily(figureData) :
+        (figureType.includes('queen')) ? this.steps.royalFamily(figureData) :
         (figureType.includes('rook')) ?  this.steps.rook(figureData) :
         (figureType.includes('bishop')) ? this.steps.bishop(figureData) :
         (figureType.includes('knight')) ? this.steps.knight(figureData) :
         this.steps.pawn(figureData);
+        this.initStepTo()
+      
     },
 
     steps: {
 
-        king: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+        checkAround: function (firstCoordinate, secCoordinate, rowDirection, direction, figure){
+                if (secCoordinate >= 0 || secCoordinate <= 7){
+                    if (checkValidDirection(secCoordinate, direction)) {
+                        if (checkValidDirection(firstCoordinate, rowDirection)){
+                            let nextField = document.querySelector(`[data-row="${firstCoordinate + rowDirection}"][data-col="${secCoordinate + direction}"]`);
+                            if (nextField === null) return;
+                            if (nextField.classList.contains('empty')) {
+                                nextField.classList.add('valid-step');
+                                if (figure === 'knight' || figure === 'king') return;
+                                this.checkAround(firstCoordinate+rowDirection, secCoordinate + direction, rowDirection, direction);
+                            }// itt kell checkkolni a nem üres mezőt, hogy fehér vagy fekete áll rajta
+                            //
+                            //}
+                        }
+                    }
+                }
+
+                function checkValidDirection(coordinate, direction){
+                if (coordinate + direction > 7 || coordinate + direction < 0){
+                    return false;
+                } else {return true}
+            }
         },
 
-        queen: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+        royalFamily: function (figureData) {
+            let clickedCol = +figureData.col;
+            let clickedRow = +figureData.row;
+            let figure;
+            (figureData.figure.dataset.name.includes('king')) ? figure = 'king' : figure = 'queen';
+            this.checkAround(clickedRow, clickedCol, 0, +1, figure);
+            this.checkAround(clickedRow, clickedCol, +1, 0, figure);
+            this.checkAround(clickedRow, clickedCol, -1, 0, figure);
+            this.checkAround(clickedRow, clickedCol, 0, -1, figure);
+            this.checkAround(clickedRow, clickedCol, +1, +1, figure);
+            this.checkAround(clickedRow, clickedCol, -1, -1, figure);
+            this.checkAround(clickedRow, clickedCol, -1, +1, figure);
+            this.checkAround(clickedRow, clickedCol, +1, -1, figure);
         },
 
         rook: function (figureData) {
-            console.log(`Need valid moves for ${figureData.figure.dataset.name}`);
-            return "valid fields"
+            let clickedCol = +figureData.col;
+            let clickedRow = +figureData.row;
+
+            this.checkAround(clickedRow, clickedCol, 0, +1);
+            this.checkAround(clickedRow, clickedCol, +1, 0);
+            this.checkAround(clickedRow, clickedCol, -1, 0);
+            this.checkAround(clickedRow, clickedCol, 0, -1);
+            // //bishop
+            // checkAround(clickedRow, clickedCol, +1, +1)
+            // checkAround(clickedRow, clickedCol, -1, -1)
+            // checkAround(clickedRow, clickedCol, -1, +1)
+            // checkAround(clickedRow, clickedCol, +1, -1)
         },
 
         bishop: function (figureData) {
@@ -174,8 +223,18 @@ const game = {
         },
 
         knight: function (figureData) {
+            let clickedCol = +figureData.col;
+            let clickedRow = +figureData.row;
 
-            return "add valid-step class to valid fields"
+            this.checkAround(clickedRow, clickedCol, +1, +2, 'knight')
+            this.checkAround(clickedRow, clickedCol, +1, -2, 'knight')
+            this.checkAround(clickedRow, clickedCol, +2, -1, 'knight')
+            this.checkAround(clickedRow, clickedCol, +2, +1, 'knight')
+            this.checkAround(clickedRow, clickedCol, -1, -2, 'knight')
+            this.checkAround(clickedRow, clickedCol, -1, +2, 'knight')
+            this.checkAround(clickedRow, clickedCol, -2, +1, 'knight')
+            this.checkAround(clickedRow, clickedCol, -2, -1, 'knight')
+
         },
 
         pawn: function (figureData) {
@@ -193,7 +252,14 @@ const game = {
             return "valid fields"
         }
     },
-
+  
+    step: function (stepField) {
+        let figure = document.querySelector(`[data-clicked="true"]`);
+        stepField.innerHTML = figure.outerHTML;
+        figure.remove();
+        stepField.querySelector('div').removeAttribute('data-clicked');
+    },
+      
     switchPlayer: function () {
         let currentPlayer = document.querySelector('.player');
         let playerNumber = currentPlayer.dataset['player'];
