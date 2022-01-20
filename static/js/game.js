@@ -45,7 +45,7 @@ const game = {
         createRow: function (gameField, rowNumber) {
             gameField.insertAdjacentHTML(
                 `beforeend`,
-                `<div class="row" data-row-container="${rowNumber}">${rowNumber + 1}</div>`
+                `<div class="row" data-row-container="${rowNumber}"></div>`
             );
         },
 
@@ -384,9 +384,11 @@ const game = {
         let content = document.querySelector('.replace');
         content.innerHTML = '<h1 class="head">The chess game</h1>' +
             '<div class="login">\n' +
-        '       <input type="text" id="player-1">' +
+            '   <label for="player-1" >First Player</label>' +
+            '   <input type="text" id="player-1">' +
+            '   <label for="player-2" >Secound Player</label>' +
             '   <input type="text" id="player-2">' +
-            '   <input type="button" id="player-name-button" value="submit" required minlength="3">' +
+            '   <button type="button" id="player-name-button" value="submit">Play</button>' +
             '</div>'
         let nameSubmit = document.getElementById('player-name-button');
         nameSubmit.addEventListener('click', game.init);
