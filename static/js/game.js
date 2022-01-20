@@ -32,9 +32,11 @@ const game = {
                 '    <div>\n' +
                 `        <h3 class="player-name">${playerOne}</h3>\n` +
                 '    </div>\n' +
+                '    <div class="black-figure-container figure-container"></div>' +
                 '\n' +
                 '    <div class="chess-board"></div>\n' +
                 '\n' +
+                '    <div class="white-figure-container figure-container"></div>' +
                 '    <div>\n' +
                 `        <h3 class="player-name">${playerTwo}</h3>\n` +
                 '    </div>'
@@ -325,23 +327,22 @@ const game = {
 
         },
 
-        pawn: function (figureData) {
+        pawn: function (figureData, validateCheck) {
             let validRow = document.querySelectorAll(`[data-row="${(figureData.range === 'positive') ? +figureData.row + 1 : +figureData.row - 1}"]`);
             let [figFront, figFrontLeft, figFrontRight] = [validRow[+figureData.col], validRow[+figureData.col - 1], validRow[+figureData.col + 1]];
             let move = +figureData.figure.dataset.move;
-            if (figFront.classList.contains('empty')) {
-                figFront.classList.add('valid-step');
-                if ( move === 0) {
-
-                    let validStep = document.querySelector(`[data-col="${figureData.col}"][data-row="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`);
-                    validStep.classList.add('valid-step');
+            let validStep = document.querySelector(`[data-col="${figureData.col}"][data-row="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`);
+            if (figFront.classList.contains('empty', figureData.enemy)) {
+                (!validateCheck) ? figFront.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
+                if (move === 0 && validStep.classList.contains('empty')) {
+                    (!validateCheck) ? validStep.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
                 }
             }
             if (figFrontLeft && figFrontLeft.classList.contains(figureData.enemy)) {
-                    figFrontLeft.classList.add('valid-step');
+                (!validateCheck) ? figFrontLeft.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
                 }
             if (figFrontRight && figFrontRight.classList.contains(figureData.enemy)) {
-                    figFrontRight.classList.add('valid-step');
+                (!validateCheck) ? figFrontRight.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
             }
         }
     },
@@ -350,7 +351,7 @@ const game = {
         game.hit(stepField);
         let currentFigure = sessionStorage.getItem('currentFigure');
         let figure = document.querySelector(`[data-name=${currentFigure}]`);
-        let figureType = (currentFigure.includes('white')) ? 'white-fig-on' : 'black-fig-on';
+        let [figureType, enemyType] = (currentFigure.includes('white')) ? ['white-fig-on', 'black-fig-on'] : ['black-fig-on', 'white-fig-on'];
         figure.parentElement.classList.remove(figureType);
         figure.parentElement.classList.add('empty');
 	    let fragment = document.createDocumentFragment();
@@ -358,15 +359,27 @@ const game = {
 	    stepField.appendChild(fragment);
         stepField.classList.add(figureType);
         stepField.classList.remove('empty');
+        stepField.classList.remove(enemyType);
         let moves = +stepField.children[0].dataset.move;
         stepField.children[0].setAttribute('data-move', `${moves + 1}`);
+
     },
 
     hit: function (stepField) {
         if (stepField.children[0]) {
-            console.log(stepField.children[0])
-            stepField.removeChild(stepField.children[0]);
+            this.containHitFigure(stepField.children[0]);
         }
+    },
+
+    containHitFigure: function (figure) {
+        let blackContainer = document.querySelector('.black-figure-container'),
+            whiteContainer = document.querySelector('.white-figure-container'),
+            container;
+        (figure.dataset.name.substring(0,5) === 'black') ? container = blackContainer : container = whiteContainer;
+        container.insertAdjacentElement(
+            'beforeend',
+            figure
+        );
     },
 
     switchPlayer: function () {
