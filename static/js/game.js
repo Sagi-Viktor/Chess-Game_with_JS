@@ -174,7 +174,7 @@ const game = {
             //this.switchPlayer();
             //
             //
-            //
+            //asdddsssssssssssssssssssssssssssssssssssssssssssssssss
             //
             console.log('JEEEEEEEE')
         },
