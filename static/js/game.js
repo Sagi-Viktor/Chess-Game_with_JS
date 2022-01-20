@@ -85,8 +85,8 @@ const game = {
             let rowOfWhitePawns = document.querySelectorAll(`[data-row-container="7"] .col`);
 
             iteratingRows(rowOfBlackFigures, chessFigures, "black");
-            // iteratingRows(rowOfBlackPawns, chessPawns, "black");
-            // iteratingRows(rowOfWhiteFigures, chessPawns, "white");
+            iteratingRows(rowOfBlackPawns, chessPawns, "black");
+            iteratingRows(rowOfWhiteFigures, chessPawns, "white");
             iteratingRows(rowOfWhitePawns, chessFigures, "white");
 
             function iteratingRows(row, figures, playerColor) {
@@ -214,7 +214,7 @@ const game = {
                 fields: document.querySelectorAll('div.col'),
                 range: (figure.dataset.name.includes('black')) ? 'positive' : 'negative',
                 type: (figure.dataset.name.includes('black')) ? 'black' : 'white',
-                enemy: (figure.classList.contains('black-fig-on')) ? 'white-fig-on' : 'black-fig-on',
+                enemy: (figure.parentElement.classList.contains('black-fig-on')) ? 'white-fig-on' : 'black-fig-on',
                 figure: figure,
                 row: clickedField.dataset.row,
                 col: clickedField.dataset.col,
