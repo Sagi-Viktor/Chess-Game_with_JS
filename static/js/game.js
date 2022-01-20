@@ -181,7 +181,7 @@ const game = {
             game.step(stepField);
 
             let figure = stepField.children[0];
-            game.stepValidation.getClickedDatas(figure, stepField, validateCheck=true);
+            //game.stepValidation.getClickedDatas(figure, stepField, validateCheck=true);
             //matt lépés validátor
             game.switchPlayer();
             game.nextRound();
@@ -375,7 +375,7 @@ const game = {
         let blackContainer = document.querySelector('.black-figure-container'),
             whiteContainer = document.querySelector('.white-figure-container'),
             container;
-        (figure.dataset.name.substring(0,5) === 'black') ? container = blackContainer : container = whiteContainer;
+        (figure.dataset.name.substring(0,5) === 'black') ? container = whiteContainer : container = blackContainer;
         container.insertAdjacentElement(
             'beforeend',
             figure
