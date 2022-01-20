@@ -24,10 +24,10 @@ const game = {
         },
 
         setHtmlWithPlayers: function () {
-            const playerOne = document.getElementById('player-1').value;
-            const playerTwo = document.getElementById('player-2').value;
-            let page = document.querySelector('.replace');
+            const playerOne = document.getElementById('player-1').value,
+                playerTwo = document.getElementById('player-2').value;
             sessionStorage.setItem('player', 'white');
+            let page = document.querySelector('.replace');
             page.innerHTML = '<h1 class="head">The chess game</h1>\n' +
                 '\n' +
                 '    <div>\n' +
@@ -125,9 +125,7 @@ const game = {
 
         newGameButton: function () {
             let navBar = document.querySelector('nav#nav');
-            navBar.innerHTML = `
-            <a id="new-game">New Game</a>
-            `
+            navBar.innerHTML = `<a id="new-game">New Game</a>`;
             let newGameButton = document.querySelector('nav > a#new-game');
             newGameButton.addEventListener('click', function () {
                 main();
@@ -182,8 +180,6 @@ const game = {
             game.step(stepField);
             game.switchPlayer();
             game.nextRound();
-            console.log(sessionStorage.getItem('player'))
-            console.log('JEEEEEEEE')
         },
 
         removeClickInitStepTo: function () {
@@ -192,10 +188,8 @@ const game = {
             for (let stepField of fields) {
                 stepField.removeEventListener('click', this.clickInitStepTo);
                 game.clearStepFields(stepField);
-
             }
         },
-
     },
 
     clearStepFields: function (field) {
@@ -223,10 +217,8 @@ const game = {
             }
             sessionStorage.setItem('stepFromRow', clickedField.dataset.row);
             sessionStorage.setItem('stepFromCol', clickedField.dataset.col);
-
             this.startValidation(figureData);
             game.click.initStepTo();
-
         },
 
         startValidation: function (figureData){
@@ -256,7 +248,6 @@ const game = {
                         }
                     }
                 }
-
                 function checkValidDirection(coordinate, direction){
                 return (!(coordinate + direction > 7 || coordinate + direction < 0))
             }
@@ -356,8 +347,8 @@ const game = {
     },
 
     initPlayerNames: function () {
-        let page = document.querySelector('.replace')
-        page.innerHTML = '<h1 class="head">The chess game</h1>' +
+        let content = document.querySelector('.replace')
+        content.innerHTML = '<h1 class="head">The chess game</h1>' +
             '<div class="login">\n' +
         '       <input type="text" id="player-1">' +
             '   <input type="text" id="player-2">' +
