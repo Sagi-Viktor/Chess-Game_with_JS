@@ -343,10 +343,12 @@ const game = {
         let figure = document.querySelector(`[data-name=${currentFigure}]`);
         let figureType = (currentFigure.includes('white')) ? 'white-fig-on' : 'black-fig-on';
         figure.parentElement.classList.remove(figureType);
+        figure.parentElement.classList.add('empty');
 	    let fragment = document.createDocumentFragment();
 	    fragment.appendChild(figure);
 	    stepField.appendChild(fragment);
         stepField.classList.add(figureType);
+        stepField.classList.remove('empty');
     },
 
     switchPlayer: function () {
