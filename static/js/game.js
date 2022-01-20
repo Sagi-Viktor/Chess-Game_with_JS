@@ -2,7 +2,6 @@
 const game = {
     init: function (){
         game.initGame.createGame();
-        game.play();
     },
 
     play: function () {
@@ -11,7 +10,6 @@ const game = {
   
     initGame: {
         createBoard: function () {
-            sessionStorage.setItem('check', 'false');
             this.setHtmlWithPlayers()
             // debugger;
             let gameField = document.querySelector('.chess-board');
@@ -36,6 +34,9 @@ const game = {
                 '    <div>\n' +
                 `        <h3 class="player-name">${playerOne}</h3>\n` +
                 '    </div>\n' +
+                '\n' +
+                '    <div class="chess-board"></div>\n' +
+                '\n' +
                 '    <div>\n' +
                 `        <h3 class="player-name">${playerTwo}</h3>\n` +
                 '    </div>'
@@ -167,12 +168,6 @@ const game = {
             game.click.removeClickInitStepTo();
             game.click.removeClickInitStepWith();
             game.step(stepField);
-            //matt lépés validátor
-            //this.switchPlayer();
-            //
-            //
-            //asdddsssssssssssssssssssssssssssssssssssssssssssssssss
-            //
             console.log('JEEEEEEEE')
         },
 
@@ -409,8 +404,8 @@ const game = {
             '   <input type="text" id="player-2">' +
             '   <input type="button" id="player-name-button" value="submit" required minlength="3">' +
             '</div>'
-        let nameSubmit = document.getElementById('player-name-button');
-        nameSubmit.addEventListener('click', game.init);
+        let nameSubmit = document.getElementById('player-name-button')
+        nameSubmit.addEventListener('click', game.init)
     },
 
 
@@ -419,5 +414,5 @@ const game = {
     }
 };
 
-game.initPlayerNames();
-
+game.initPlayerNames()
+game.play();
