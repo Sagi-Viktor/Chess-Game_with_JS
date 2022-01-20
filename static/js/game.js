@@ -317,23 +317,23 @@ const game = {
 
         },
 
-        pawn: function (figureData) {
+        pawn: function (figureData, validateCheck) {
             let validRow = document.querySelectorAll(`[data-row="${(figureData.range === 'positive') ? +figureData.row + 1 : +figureData.row - 1}"]`);
             let [figFront, figFrontLeft, figFrontRight] = [validRow[+figureData.col], validRow[+figureData.col - 1], validRow[+figureData.col + 1]];
             let move = +figureData.figure.dataset.move;
-            if (figFront.classList.contains('empty')) {
-                figFront.classList.add('valid-step');
-                if ( move === 0) {
+            let validStep = document.querySelector(`[data-col="${figureData.col}"][data-row="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`);
 
-                    let validStep = document.querySelector(`[data-col="${figureData.col}"][data-row="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`);
-                    validStep.classList.add('valid-step');
+            if (figFront.classList.contains('empty', figureData.enemy)) {
+                (!validateCheck) ? figFront.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
+                if (move === 0) {
+                    (!validateCheck) ? validStep.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
                 }
             }
             if (figFrontLeft && figFrontLeft.classList.contains(figureData.enemy)) {
-                    figFrontLeft.classList.add('valid-step');
+                (!validateCheck) ? figFrontLeft.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
                 }
             if (figFrontRight && figFrontRight.classList.contains(figureData.enemy)) {
-                    figFrontRight.classList.add('valid-step');
+                (!validateCheck) ? figFrontRight.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
             }
         }
     },
