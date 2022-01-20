@@ -12,7 +12,6 @@ const game = {
     initGame: {
         createBoard: function () {
             this.setHtmlWithPlayers()
-            // debugger;
             let gameField = document.querySelector('.chess-board');
             for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
                 this.createRow(gameField, rowNumber);
@@ -25,10 +24,10 @@ const game = {
         },
 
         setHtmlWithPlayers: function () {
-            const playerOne = document.getElementById('player-1').value;
-            const playerTwo = document.getElementById('player-2').value;
-            let page = document.querySelector('.replace');
+            const playerOne = document.getElementById('player-1').value,
+                playerTwo = document.getElementById('player-2').value;
             sessionStorage.setItem('player', 'white');
+            let page = document.querySelector('.replace');
             page.innerHTML = '<h1 class="head">The chess game</h1>\n' +
                 '\n' +
                 '    <div>\n' +
@@ -126,9 +125,7 @@ const game = {
 
         newGameButton: function () {
             let navBar = document.querySelector('nav#nav');
-            navBar.innerHTML = `
-            <a id="new-game">New Game</a>
-            `
+            navBar.innerHTML = `<a id="new-game">New Game</a>`;
             let newGameButton = document.querySelector('nav > a#new-game');
             newGameButton.addEventListener('click', function () {
                 main();
@@ -185,9 +182,8 @@ const game = {
             let figure = stepField.children[0];
             game.stepValidation.getClickedDatas(figure, stepField, validateCheck=true);
             //matt lépés validátor
-
             game.switchPlayer();
-
+            game.nextRound();
         },
 
         removeClickInitStepTo: function () {
@@ -196,10 +192,8 @@ const game = {
             for (let stepField of fields) {
                 stepField.removeEventListener('click', this.clickInitStepTo);
                 game.clearStepFields(stepField);
-
             }
         },
-
     },
 
     clearStepFields: function (field) {
@@ -207,8 +201,7 @@ const game = {
     },
 
     figureValidation: function () {
-        let player = sessionStorage.getItem('player');
-        let playerColor = (player.includes('Two')) ? 'black' : 'white';
+        let playerColor = sessionStorage.getItem('player')
         let figures = document.querySelectorAll(`[data-name *="${playerColor}"]`);
         return figures;
     },
@@ -229,11 +222,8 @@ const game = {
             }
             sessionStorage.setItem('stepFromRow', clickedField.dataset.row);
             sessionStorage.setItem('stepFromCol', clickedField.dataset.col);
-
             this.startValidation(figureData, validateCheck);
-
             if (!validateCheck) {game.click.initStepTo();}
-
         },
 
         startValidation: function (figureData, validateCheck){
@@ -264,7 +254,6 @@ const game = {
                         }
                     }
                 }
-
                 function checkValidDirection(coordinate, direction){
                 return (!(coordinate + direction > 7 || coordinate + direction < 0))
             }
@@ -364,8 +353,8 @@ const game = {
     },
 
     initPlayerNames: function () {
-        let page = document.querySelector('.replace')
-        page.innerHTML = '<h1 class="head">The chess game</h1>' +
+        let content = document.querySelector('.replace')
+        content.innerHTML = '<h1 class="head">The chess game</h1>' +
             '<div class="login">\n' +
         '       <input type="text" id="player-1">' +
             '   <input type="text" id="player-2">' +
@@ -375,9 +364,8 @@ const game = {
         nameSubmit.addEventListener('click', game.init)
     },
 
-
     nextRound: function () {
-        this.play()
+        game.play()
     }
 };
 
