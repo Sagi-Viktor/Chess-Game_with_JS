@@ -23,12 +23,11 @@ const game = {
             }
         },
 
-
         setHtmlWithPlayers: function () {
             const playerOne = document.getElementById('player-1').value;
             const playerTwo = document.getElementById('player-2').value;
             let page = document.querySelector('.replace');
-            sessionStorage.setItem('player', 'playerOne');
+            sessionStorage.setItem('player', 'white');
             page.innerHTML = '<h1 class="head">The chess game</h1>\n' +
                 '\n' +
                 '    <div>\n' +
@@ -133,6 +132,7 @@ const game = {
     click: {
         //choose a figure
         initStepWith: function () {
+            debugger;
             let figures = game.figureValidation();
             for (let figure of figures) {
                 figure.addEventListener('click', this.clickInitStepWith);
@@ -140,6 +140,7 @@ const game = {
         },
 
         clickInitStepWith: function (event) {
+            debugger;
             game.click.removeClickInitStepTo();
             let figure = event.currentTarget;
             sessionStorage.setItem('currentFigure', figure.dataset.name);
@@ -149,6 +150,7 @@ const game = {
         },
 
         removeClickInitStepWith: function () {
+            debugger;
             let figures = game.figureValidation();
             for (let figure of figures) {
                 figure.removeEventListener('click', this.clickInitStepWith);
@@ -157,6 +159,7 @@ const game = {
 
         //make the step and remove all step function etc.
         initStepTo: function () {
+            debugger;
             let fields = document.querySelectorAll('.valid-step');
             for (let stepField of fields) {
                 stepField.addEventListener('click', this.clickInitStepTo);
@@ -164,14 +167,18 @@ const game = {
         },
 
         clickInitStepTo: function (event) {
+            debugger;
             let stepField = event.currentTarget;
             game.click.removeClickInitStepTo();
             game.click.removeClickInitStepWith();
             game.step(stepField);
+            game.switchPlayer();
+            console.log(sessionStorage.getItem('player'))
             console.log('JEEEEEEEE')
         },
 
         removeClickInitStepTo: function () {
+            debugger;
             let fields = document.querySelectorAll('.valid-step');
             console.log(fields)
             for (let stepField of fields) {
@@ -243,7 +250,9 @@ const game = {
 
     figureValidation: function () {
         let player = sessionStorage.getItem('player');
-        let playerColor = (player.includes('Two')) ? 'black' : 'white';
+        console.log(player)
+        let playerColor = (player.includes('white')) ? 'white' : 'black';
+        console.log(playerColor)
         let figures = document.querySelectorAll(`[data-name *="${playerColor}"]`);
         return figures;
     },
@@ -390,10 +399,9 @@ const game = {
     },
 
     switchPlayer: function () {
-        // let currentPlayer = document.querySelector('.player');
-        // let playerNumber = sessionStorage.getItem('player');
-        // ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
-        // currentPlayer.innerHTML = `<h3>${playerNumber}</h3>`
+        let currentPlayer = sessionStorage.getItem('player'), newPlayer;
+        (currentPlayer === 'white') ? newPlayer = 'black' : newPlayer =  'white' ;
+        sessionStorage.setItem('player', newPlayer)
     },
 
     initPlayerNames: function () {
