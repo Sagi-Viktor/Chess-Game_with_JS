@@ -233,7 +233,7 @@ const game = {
             (figureName.includes('rook')) ?  this.rook(figureData, validateCheck) :
             (figureName.includes('bishop')) ? this.bishop(figureData, validateCheck) :
             (figureName.includes('knight')) ? this.knight(figureData, validateCheck) :
-            this.pawn(figureData, validateCheck);
+            (figureName.includes('pawn')) ? this.pawn(figureData, validateCheck): null;
         },
 
         checkAround: function (firstCoordinate, secCoordinate, rowDirection, direction, figure, enemy, validateCheck){
@@ -322,9 +322,11 @@ const game = {
         pawn: function (figureData) {
             let validRow = document.querySelectorAll(`[data-row="${(figureData.range === 'positive') ? +figureData.row + 1 : +figureData.row - 1}"]`);
             let [figFront, figFrontLeft, figFrontRight] = [validRow[+figureData.col], validRow[+figureData.col - 1], validRow[+figureData.col + 1]];
+            let move = +figureData.figure.dataset.move;
             if (figFront.classList.contains('empty')) {
                 figFront.classList.add('valid-step');
-                if (+figureData.figure.dataset.move === 0) {
+                if ( move === 0) {
+
                     let validStep = document.querySelector(`[data-col="${figureData.col}"][data-row="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`);
                     validStep.classList.add('valid-step');
                 }
@@ -351,6 +353,7 @@ const game = {
         stepField.classList.add(figureType);
         stepField.classList.remove('empty');
         stepField.classList.remove(enemyType);
+
     },
 
     hit: function (stepField) {
