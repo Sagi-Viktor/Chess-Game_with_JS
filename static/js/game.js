@@ -32,9 +32,11 @@ const game = {
                 '    <div>\n' +
                 `        <h3 class="player-name">${playerOne}</h3>\n` +
                 '    </div>\n' +
+                '    <div class="black-figure-container figure-container"></div>' +
                 '\n' +
                 '    <div class="chess-board"></div>\n' +
                 '\n' +
+                '    <div class="white-figure-container figure-container"></div>' +
                 '    <div>\n' +
                 `        <h3 class="player-name">${playerTwo}</h3>\n` +
                 '    </div>'
@@ -342,7 +344,7 @@ const game = {
         game.hit(stepField);
         let currentFigure = sessionStorage.getItem('currentFigure');
         let figure = document.querySelector(`[data-name=${currentFigure}]`);
-        let figureType = (currentFigure.includes('white')) ? 'white-fig-on' : 'black-fig-on';
+        let [figureType, enemyType] = (currentFigure.includes('white')) ? ['white-fig-on', 'black-fig-on'] : ['black-fig-on', 'white-fig-on'];
         figure.parentElement.classList.remove(figureType);
         figure.parentElement.classList.add('empty');
 	    let fragment = document.createDocumentFragment();
@@ -350,15 +352,25 @@ const game = {
 	    stepField.appendChild(fragment);
         stepField.classList.add(figureType);
         stepField.classList.remove('empty');
-        let moves = +stepField.children[0].dataset.move;
-        stepField.children[0].setAttribute('data-move', `${moves + 1}`);
+        stepField.classList.remove(enemyType);
+
     },
 
     hit: function (stepField) {
         if (stepField.children[0]) {
-            console.log(stepField.children[0])
-            stepField.removeChild(stepField.children[0]);
+            this.containHitFigure(stepField.children[0]);
         }
+    },
+
+    containHitFigure: function (figure) {
+        let blackContainer = document.querySelector('.black-figure-container'),
+            whiteContainer = document.querySelector('.white-figure-container'),
+            container;
+        (figure.dataset.name.substring(0,5) === 'black') ? container = blackContainer : container = whiteContainer;
+        container.insertAdjacentElement(
+            'beforeend',
+            figure
+        );
     },
 
     switchPlayer: function () {
