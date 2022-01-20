@@ -12,7 +12,6 @@ const game = {
     initGame: {
         createBoard: function () {
             this.setHtmlWithPlayers()
-            // debugger;
             let gameField = document.querySelector('.chess-board');
             for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
                 this.createRow(gameField, rowNumber);
@@ -182,6 +181,7 @@ const game = {
             game.click.removeClickInitStepWith();
             game.step(stepField);
             game.switchPlayer();
+            game.nextRound();
             console.log(sessionStorage.getItem('player'))
             console.log('JEEEEEEEE')
         },
@@ -203,8 +203,7 @@ const game = {
     },
 
     figureValidation: function () {
-        let player = sessionStorage.getItem('player');
-        let playerColor = (player.includes('Two')) ? 'black' : 'white';
+        let playerColor = sessionStorage.getItem('player')
         let figures = document.querySelectorAll(`[data-name *="${playerColor}"]`);
         return figures;
     },
@@ -368,9 +367,8 @@ const game = {
         nameSubmit.addEventListener('click', game.init)
     },
 
-
     nextRound: function () {
-        this.play()
+        game.play()
     }
 };
 
