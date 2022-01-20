@@ -122,17 +122,29 @@ const game = {
                 }
             }
         },
+
+        newGameButton: function () {
+            let navBar = document.querySelector('nav#nav');
+            navBar.innerHTML = `
+            <a id="new-game">New Game</a>
+            `
+            let newGameButton = document.querySelector('nav > a#new-game');
+            newGameButton.addEventListener('click', function () {
+                main();
+            });
+        },
+
         createGame: function () {
-            this.createBoard()
-            this.coloringBoard()
-            this.placingFigures()
+            this.newGameButton();
+            this.createBoard();
+            this.coloringBoard();
+            this.placingFigures();
         }
     },
 
     click: {
         //choose a figure
         initStepWith: function () {
-            debugger;
             let figures = game.figureValidation();
             for (let figure of figures) {
                 figure.addEventListener('click', this.clickInitStepWith);
@@ -140,7 +152,6 @@ const game = {
         },
 
         clickInitStepWith: function (event) {
-            debugger;
             game.click.removeClickInitStepTo();
             let figure = event.currentTarget;
             sessionStorage.setItem('currentFigure', figure.dataset.name);
@@ -150,7 +161,6 @@ const game = {
         },
 
         removeClickInitStepWith: function () {
-            debugger;
             let figures = game.figureValidation();
             for (let figure of figures) {
                 figure.removeEventListener('click', this.clickInitStepWith);
@@ -159,7 +169,6 @@ const game = {
 
         //make the step and remove all step function etc.
         initStepTo: function () {
-            debugger;
             let fields = document.querySelectorAll('.valid-step');
             for (let stepField of fields) {
                 stepField.addEventListener('click', this.clickInitStepTo);
@@ -167,7 +176,6 @@ const game = {
         },
 
         clickInitStepTo: function (event) {
-            debugger;
             let stepField = event.currentTarget;
             game.click.removeClickInitStepTo();
             game.click.removeClickInitStepWith();
@@ -178,7 +186,6 @@ const game = {
         },
 
         removeClickInitStepTo: function () {
-            debugger;
             let fields = document.querySelectorAll('.valid-step');
             console.log(fields)
             for (let stepField of fields) {
@@ -190,69 +197,13 @@ const game = {
 
     },
 
-    //initStepWith: function () {
-    //    let figures = this.figureValidation();
-    //    for (let figure of figures) {
-    //        figure.addEventListener('click', this.initValidStepClick_1);
-    //    }
-    //},
-
-    //initValidStepClick_1: function (event) {
-    //    game.clearStepFields(document.querySelectorAll('.col')); // deletes the valid moves
-    //    let figure = event.currentTarget;
-    //    figure.setAttribute('data-clicked', 'true');
-    //    let clickedField = event.currentTarget.parentNode;
-    //    game.stepValidation(figure, clickedField)
-    //},
-
-
-    //removeInitStepWith_1: function () {
-    //    let figures = this.figureValidation();
-    //    for (let figure of figures) {
-    //        figure.removeEventListener('click', this.initValidStepClick_1);
-    //    }
-    //},
-
-    //initStepTo: function () {
-    //    this.initRemoveValidMoveClick_2()
-    //    this.changeFigureDiv()
-    //    let fields = document.querySelectorAll('.valid-step');
-    //    // console.log(fields)
-    //    for (let stepField of fields) {
-    //        stepField.addEventListener('click', this.initValidMoveClick_2);
-    //    }
-
-    //},
-
-    //initValidMoveClick_2: function (event) {
-    //    let stepField = event.currentTarget;
-    //    let fields = document.querySelectorAll('.valid-step');
-    //    game.step(stepField);
-    //    game.clearStepFields(fields);
-    //    console.log('JEEEEEEEE')
-
-    //    //this.switchPlayer()
-    //    //this.nextRound()
-    //},
-
-    //initRemoveValidMoveClick_2: function() {
-    //    let fields = document.querySelectorAll('.col');
-    //    console.log(fields)
-    //    for (let stepField of fields) {
-    //        stepField.removeEventListener('click', this.initValidMoveClick_2);
-    //        game.clearStepFields(stepField);
-    //    }
-    //},
-
     clearStepFields: function (field) {
         field.classList.remove('valid-step');
     },
 
     figureValidation: function () {
         let player = sessionStorage.getItem('player');
-        console.log(player)
-        let playerColor = (player.includes('white')) ? 'white' : 'black';
-        console.log(playerColor)
+        let playerColor = (player.includes('Two')) ? 'black' : 'white';
         let figures = document.querySelectorAll(`[data-name *="${playerColor}"]`);
         return figures;
     },
@@ -422,5 +373,8 @@ const game = {
     }
 };
 
-game.initPlayerNames()
-game.play();
+const main = function () {
+    game.initPlayerNames();
+}
+
+main();
