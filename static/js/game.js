@@ -324,10 +324,9 @@ const game = {
             let [figFront, figFrontLeft, figFrontRight] = [validRow[+figureData.col], validRow[+figureData.col - 1], validRow[+figureData.col + 1]];
             let move = +figureData.figure.dataset.move;
             let validStep = document.querySelector(`[data-col="${figureData.col}"][data-row="${(figureData.range === 'positive') ? +figureData.row + 2 : +figureData.row - 2}"]`);
-
             if (figFront.classList.contains('empty', figureData.enemy)) {
                 (!validateCheck) ? figFront.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
-                if (move === 0) {
+                if (move === 0 && validStep.classList.contains('empty')) {
                     (!validateCheck) ? validStep.classList.add('valid-step') : sessionStorage.setItem('inCheck', 'True');
                 }
             }
@@ -353,6 +352,8 @@ const game = {
         stepField.classList.add(figureType);
         stepField.classList.remove('empty');
         stepField.classList.remove(enemyType);
+        let moves = +stepField.children[0].dataset.move;
+        stepField.children[0].setAttribute('data-move', `${moves + 1}`);
 
     },
 
