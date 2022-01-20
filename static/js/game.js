@@ -258,19 +258,18 @@ const game = {
         },
 
         checkAround: function (firstCoordinate, secCoordinate, rowDirection, direction, figure, enemy){
-            console.log(enemy)
                 if (secCoordinate >= 0 || secCoordinate <= 7){
                     if (checkValidDirection(secCoordinate, direction)) {
                         if (checkValidDirection(firstCoordinate, rowDirection)){
                             let nextField = document.querySelector(`[data-row="${firstCoordinate + rowDirection}"][data-col="${secCoordinate + direction}"]`);
                             if (nextField === null) return;
-                            debugger;
                             if (nextField.classList.contains('empty')) {
                                 nextField.classList.add('valid-step');
                                 if (figure === 'knight' || figure === 'king') return;
-                                this.checkAround(firstCoordinate+rowDirection, secCoordinate + direction, rowDirection, direction);
+                                this.checkAround(firstCoordinate+rowDirection, secCoordinate + direction, rowDirection, direction, figure, enemy);
                             } else if (nextField.classList.contains(enemy)){
-                                console.log(enemy)
+                                nextField.classList.add('valid-step');
+                                //this.isCheck(nextField)
                             }
                         }
                     }
@@ -279,6 +278,10 @@ const game = {
                 function checkValidDirection(coordinate, direction){
                 return (!(coordinate + direction > 7 || coordinate + direction < 0))
             }
+        },
+
+        isCheck: function (field){
+            return (field.dataset.name.includes('king'))
         },
 
         royalFamily: function (figureData) {
