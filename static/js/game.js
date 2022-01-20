@@ -294,7 +294,7 @@ const game = {
             let clickedRow = +figureData.row;
             let figure = 'bishop';
             let enemy = figureData.enemy;
-            debugger;
+
             for (let rowDirection=-1; rowDirection<2; rowDirection=rowDirection+2){
                 for (let colDirection=-1; colDirection<2; colDirection=colDirection+2){
                     this.checkAround(clickedRow, clickedCol, rowDirection, colDirection, figure, enemy, validateCheck)
