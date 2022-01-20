@@ -1,6 +1,4 @@
 
-
-
 const game = {
     init: function (){
         this.initGame.createGame();
@@ -120,11 +118,11 @@ const game = {
         },
 
         clickInitStepWith: function (event) {
+            game.click.removeClickInitStepTo();
             let figure = event.currentTarget;
             sessionStorage.setItem('currentFigure', figure.dataset.name);
             let clickedField = event.currentTarget.parentNode;
-            game.stepValidation(figure, clickedField);
-            game.click.removeClickInitStepTo();////////////////////////////////////////////////////
+            game.stepValidation.getClickedDatas(figure, clickedField);
 
         },
 
@@ -146,6 +144,7 @@ const game = {
         clickInitStepTo: function (event) {
             let stepField = event.currentTarget;
             game.click.removeClickInitStepTo();
+            game.click.removeClickInitStepWith();
             game.step(stepField);
             console.log('JEEEEEEEE')
         },
@@ -156,13 +155,11 @@ const game = {
             for (let stepField of fields) {
                 stepField.removeEventListener('click', this.clickInitStepTo);
                 game.clearStepFields(stepField);
-                game.click.removeClickInitStepWith();
+
             }
         },
 
     },
-
-
 
     //initStepWith: function () {
     //    let figures = this.figureValidation();
@@ -229,35 +226,38 @@ const game = {
         return figures;
     },
 
-    stepValidation: function (figure, clickedField) {
-        const figureData = {
-            fields: document.querySelectorAll('div.col'),
-            range: (figure.dataset.name.includes('black')) ? 'positive' : 'negative',
-            type: (figure.dataset.name.includes('black')) ? 'black' : 'white',
-            enemy: (figure.classList.contains('black-fig-on')) ? 'white-fig-on' : 'black-fig-on',
-            figure: figure,
-            row: clickedField.dataset.row,
-            col: clickedField.dataset.col,
-            currentColumn: clickedField
-        }
-        sessionStorage.setItem('stepFromRow', clickedField.dataset.row);
-        sessionStorage.setItem('stepFromCol', clickedField.dataset.col);
-        let figureName = figure.dataset.name;
+    stepValidation: {
 
-        (figureName.includes('king')) ?  this.steps.royalFamily(figureData) :
-        (figureName.includes('queen')) ? this.steps.royalFamily(figureData) :
-        (figureName.includes('rook')) ?  this.steps.rook(figureData) :
-        (figureName.includes('bishop')) ? this.steps.bishop(figureData) :
-        (figureName.includes('knight')) ? this.steps.knight(figureData) :
-        this.steps.pawn(figureData);
-        this.click.initStepTo();
+        getClickedDatas: function (figure, clickedField) {
+            const figureData = {
+                fields: document.querySelectorAll('div.col'),
+                range: (figure.dataset.name.includes('black')) ? 'positive' : 'negative',
+                type: (figure.dataset.name.includes('black')) ? 'black' : 'white',
+                enemy: (figure.classList.contains('black-fig-on')) ? 'white-fig-on' : 'black-fig-on',
+                figure: figure,
+                row: clickedField.dataset.row,
+                col: clickedField.dataset.col,
+                currentColumn: clickedField
+            }
+            sessionStorage.setItem('stepFromRow', clickedField.dataset.row);
+            sessionStorage.setItem('stepFromCol', clickedField.dataset.col);
 
-    },
+            this.startValidation(figureData);
+            game.click.initStepTo();
 
+        },
 
-    steps: {
+        startValidation: function (figureData){
+            let figureName = figureData.figure.dataset.name;
+            (figureName.includes('king')) ?  this.royalFamily(figureData) :
+            (figureName.includes('queen')) ? this.royalFamily(figureData) :
+            (figureName.includes('rook')) ?  this.rook(figureData) :
+            (figureName.includes('bishop')) ? this.bishop(figureData) :
+            (figureName.includes('knight')) ? this.knight(figureData) :
+            this.pawn(figureData);
+        },
 
-        checkAround: function (firstCoordinate, secCoordinate, rowDirection, direction, figure){
+        checkAround: function (firstCoordinate, secCoordinate, rowDirection, direction, figure, enemy){
                 if (secCoordinate >= 0 || secCoordinate <= 7){
                     if (checkValidDirection(secCoordinate, direction)) {
                         if (checkValidDirection(firstCoordinate, rowDirection)){
@@ -267,9 +267,9 @@ const game = {
                                 nextField.classList.add('valid-step');
                                 if (figure === 'knight' || figure === 'king') return;
                                 this.checkAround(firstCoordinate+rowDirection, secCoordinate + direction, rowDirection, direction);
-                            }// itt kell checkkolni a nem üres mezőt, hogy fehér vagy fekete áll rajta
-                            //
-                            //}
+                            } else if (nextField.classList.contains(enemy)){
+
+                            }
                         }
                     }
                 }
@@ -284,54 +284,54 @@ const game = {
             let clickedRow = +figureData.row;
             let figure;
             (figureData.figure.dataset.name.includes('king')) ? figure = 'king' : figure = 'queen';
-            this.checkAround(clickedRow, clickedCol, 0, +1, figure);
-            this.checkAround(clickedRow, clickedCol, +1, 0, figure);
-            this.checkAround(clickedRow, clickedCol, -1, 0, figure);
-            this.checkAround(clickedRow, clickedCol, 0, -1, figure);
-            this.checkAround(clickedRow, clickedCol, +1, +1, figure);
-            this.checkAround(clickedRow, clickedCol, -1, -1, figure);
-            this.checkAround(clickedRow, clickedCol, -1, +1, figure);
-            this.checkAround(clickedRow, clickedCol, +1, -1, figure);
+            let enemy = figureData.enemy;
+
+            this.checkAround(clickedRow, clickedCol, 0, +1, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, +1, 0, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, -1, 0, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, 0, -1, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, +1, +1, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, -1, -1, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, -1, +1, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, +1, -1, figure, enemy);
         },
 
-        'rook': function (figureData) {
+        rook: function (figureData) {
             let clickedCol = +figureData.col;
             let clickedRow = +figureData.row;
+            let enemy = figureData.enemy;
 
-            this.checkAround(clickedRow, clickedCol, 0, +1);
-            this.checkAround(clickedRow, clickedCol, +1, 0);
-            this.checkAround(clickedRow, clickedCol, -1, 0);
-            this.checkAround(clickedRow, clickedCol, 0, -1);
-            // //bishop
-            // checkAround(clickedRow, clickedCol, +1, +1)
-            // checkAround(clickedRow, clickedCol, -1, -1)
-            // checkAround(clickedRow, clickedCol, -1, +1)
-            // checkAround(clickedRow, clickedCol, +1, -1)
+            this.checkAround(clickedRow, clickedCol, 0, +1, 'rook', enemy);
+            this.checkAround(clickedRow, clickedCol, +1, 0, 'rook', enemy);
+            this.checkAround(clickedRow, clickedCol, -1, 0, 'rook', enemy);
+            this.checkAround(clickedRow, clickedCol, 0, -1, 'rook', enemy);
         },
 
         bishop: function (figureData) {
             let clickedCol = +figureData.col;
             let clickedRow = +figureData.row;
-            let figure = 'bishop'
+            let figure = 'bishop';
+            let enemy = figureData.enemy
 
-            this.checkAround(clickedRow, clickedCol, +1, +1, figure);
-            this.checkAround(clickedRow, clickedCol, -1, -1, figure);
-            this.checkAround(clickedRow, clickedCol, -1, +1, figure);
-            this.checkAround(clickedRow, clickedCol, +1, -1, figure);
+            this.checkAround(clickedRow, clickedCol, +1, +1, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, -1, -1, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, -1, +1, figure, enemy);
+            this.checkAround(clickedRow, clickedCol, +1, -1, figure, enemy);
         },
 
         knight: function (figureData) {
             let clickedCol = +figureData.col;
             let clickedRow = +figureData.row;
+            let enemy = figureData.enemy;
 
-            this.checkAround(clickedRow, clickedCol, +1, +2, 'knight')
-            this.checkAround(clickedRow, clickedCol, +1, -2, 'knight')
-            this.checkAround(clickedRow, clickedCol, +2, -1, 'knight')
-            this.checkAround(clickedRow, clickedCol, +2, +1, 'knight')
-            this.checkAround(clickedRow, clickedCol, -1, -2, 'knight')
-            this.checkAround(clickedRow, clickedCol, -1, +2, 'knight')
-            this.checkAround(clickedRow, clickedCol, -2, +1, 'knight')
-            this.checkAround(clickedRow, clickedCol, -2, -1, 'knight')
+            this.checkAround(clickedRow, clickedCol, +1, +2, 'knight', enemy)
+            this.checkAround(clickedRow, clickedCol, +1, -2, 'knight', enemy)
+            this.checkAround(clickedRow, clickedCol, +2, -1, 'knight', enemy)
+            this.checkAround(clickedRow, clickedCol, +2, +1, 'knight', enemy)
+            this.checkAround(clickedRow, clickedCol, -1, -2, 'knight', enemy)
+            this.checkAround(clickedRow, clickedCol, -1, +2, 'knight', enemy)
+            this.checkAround(clickedRow, clickedCol, -2, +1, 'knight', enemy)
+            this.checkAround(clickedRow, clickedCol, -2, -1, 'knight', enemy)
 
         },
 
@@ -377,5 +377,3 @@ const game = {
 
 game.init();
 game.play();
-
-
