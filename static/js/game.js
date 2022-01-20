@@ -2,6 +2,7 @@
 const game = {
     init: function (){
         game.initGame.createGame();
+        game.play();
     },
 
     play: function () {
@@ -168,6 +169,8 @@ const game = {
             game.click.removeClickInitStepTo();
             game.click.removeClickInitStepWith();
             game.step(stepField);
+            //matt lépés validátor
+            //this.switchPlayer();
             console.log('JEEEEEEEE')
         },
 
@@ -404,8 +407,8 @@ const game = {
             '   <input type="text" id="player-2">' +
             '   <input type="button" id="player-name-button" value="submit" required minlength="3">' +
             '</div>'
-        let nameSubmit = document.getElementById('player-name-button')
-        nameSubmit.addEventListener('click', game.init)
+        let nameSubmit = document.getElementById('player-name-button');
+        nameSubmit.addEventListener('click', game.init);
     },
 
 
@@ -414,5 +417,5 @@ const game = {
     }
 };
 
-game.initPlayerNames()
-game.play();
+game.initPlayerNames();
+
