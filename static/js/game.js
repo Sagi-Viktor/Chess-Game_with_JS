@@ -11,6 +11,7 @@ const game = {
   
     initGame: {
         createBoard: function () {
+            sessionStorage.setItem('check', 'false');
             this.setHtmlWithPlayers()
             // debugger;
             let gameField = document.querySelector('.chess-board');
@@ -171,6 +172,10 @@ const game = {
             game.step(stepField);
             //matt lépés validátor
             //this.switchPlayer();
+            //
+            //
+            //
+            //
             console.log('JEEEEEEEE')
         },
 
