@@ -1,167 +1,225 @@
 
+
+
 const game = {
     init: function (){
-        this.createBoard()
-        this.coloringBoard()
-        this.placingFigures()
+        this.initGame.createGame();
     },
 
     play: function () {
-        this.initStepWith();
-
+        this.click.initStepWith();
     },
 
-    createBoard: function () {
-        let gameField = document.querySelector('.chess-board');
-        for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
-            this.createRow(gameField, rowNumber);
-            let row = document.querySelector(`[data-row-container="${rowNumber}"]`);
-            for (let colNumber = 0; colNumber < 8; colNumber++) {
-                this.createCol(row, colNumber);
+    initGame: {
+        createBoard: function () {
+            let gameField = document.querySelector('.chess-board');
+            for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
+                this.createRow(gameField, rowNumber);
+                let row = document.querySelector(`[data-row-container="${rowNumber}"]`);
+                for (let colNumber = 0; colNumber < 8; colNumber++) {
+                    this.createCol(row, colNumber);
+                }
             }
-        }
-    },
+        },
 
-    createRow: function (gameField, rowNumber) {
-        gameField.insertAdjacentHTML(
-            `beforeend`,
-            `<div class="row" data-row-container="${rowNumber}">${rowNumber + 1}</div>`
-        );
-    },
+        createRow: function (gameField, rowNumber) {
+            gameField.insertAdjacentHTML(
+                `beforeend`,
+                `<div class="row" data-row-container="${rowNumber}">${rowNumber + 1}</div>`
+            );
+        },
 
-    createCol: function (row, colNumber) {
-        row.insertAdjacentHTML(
-            `beforeend`,
-            `<div class="col empty" data-row="${row.dataset.rowContainer}" data-col="${colNumber}"></div>`
-        );
-    },
+        createCol: function (row, colNumber) {
+            row.insertAdjacentHTML(
+                `beforeend`,
+                `<div class="col empty" data-row="${row.dataset.rowContainer}" data-col="${colNumber}"></div>`
+            );
+        },
 
-    placingFigures: function (){
+        placingFigures: function () {
 
-        const chessFigures = {
-            0: "left-rook",
-            1: "left-knight",
-            2: "left-bishop",
-            3: "queen",
-            4: "king",
-            5: "right-bishop",
-            6: "right-knight",
-            7: "right-rook"
-        };
+            const chessFigures = {
+                0: "left-rook",
+                1: "left-knight",
+                2: "left-bishop",
+                3: "queen",
+                4: "king",
+                5: "right-bishop",
+                6: "right-knight",
+                7: "right-rook"
+            };
 
-        const chessPawns = {
-            0: "pawn-1",
-            1: "pawn-2",
-            2: "pawn-3",
-            3: "pawn-4",
-            4: "pawn-5",
-            5: "pawn-6",
-            6: "pawn-7",
-            7: "pawn-8"
-        };
+            const chessPawns = {
+                0: "pawn-1",
+                1: "pawn-2",
+                2: "pawn-3",
+                3: "pawn-4",
+                4: "pawn-5",
+                5: "pawn-6",
+                6: "pawn-7",
+                7: "pawn-8"
+            };
 
-        let rowOfBlackFigures = document.querySelectorAll(`[data-row-container="0"] .col`);
-        let rowOfBlackPawns = document.querySelectorAll(`[data-row-container="1"] .col`);
-        let rowOfWhiteFigures = document.querySelectorAll(`[data-row-container="6"] .col`);
-        let rowOfWhitePawns = document.querySelectorAll(`[data-row-container="7"] .col`);
+            let rowOfBlackFigures = document.querySelectorAll(`[data-row-container="0"] .col`);
+            let rowOfBlackPawns = document.querySelectorAll(`[data-row-container="1"] .col`);
+            let rowOfWhiteFigures = document.querySelectorAll(`[data-row-container="6"] .col`);
+            let rowOfWhitePawns = document.querySelectorAll(`[data-row-container="7"] .col`);
 
-        iteratingRows(rowOfBlackFigures, chessFigures, "black");
-        // iteratingRows(rowOfBlackPawns, chessPawns, "black");
-        // iteratingRows(rowOfWhiteFigures, chessPawns, "white");
-        iteratingRows(rowOfWhitePawns, chessFigures, "white");
+            iteratingRows(rowOfBlackFigures, chessFigures, "black");
+            // iteratingRows(rowOfBlackPawns, chessPawns, "black");
+            // iteratingRows(rowOfWhiteFigures, chessPawns, "white");
+            iteratingRows(rowOfWhitePawns, chessFigures, "white");
 
-        function iteratingRows(row, figures, playerColor){
-            for (let [number, col] of row.entries()){
-                let figureName = figures[number];
-                col.insertAdjacentHTML(
-                    `beforeend`,
-                    `<div class="figure" data-name="${playerColor}-${figureName}" data-move="0" draggable="true"></div>`
-                );
+            function iteratingRows(row, figures, playerColor) {
+                for (let [number, col] of row.entries()) {
+                    let figureName = figures[number];
+                    col.insertAdjacentHTML(
+                        `beforeend`,
+                        `<div class="figure" data-name="${playerColor}-${figureName}" data-move="0" draggable="true"></div>`
+                    );
 
-                col.classList.remove('empty');
-                col.classList.add(`${playerColor}-fig-on`);
+                    col.classList.remove('empty');
+                    col.classList.add(`${playerColor}-fig-on`);
+                }
             }
-        }
-        // let rookField = document.querySelector(`[data-row="4"][data-col="3"]`);
-        // rookField.insertAdjacentHTML(
-        //         `beforeend`,
-        //         `<div class="figure" data-name="white-queen" data-move="0" draggable="true"></div>`
-        //     );
-        // rookField.classList.remove('empty');
-        // rookField.classList.add(`white-fig-on`);
-    },
 
-    coloringBoard : function () {
-        const board = document.querySelectorAll('div.chess-board .row');
-        for (let [rowIndex, row] of board.entries()) {
-            let [evenField, oddField] = (rowIndex % 2 === 0) ? ['white-field', 'black-field'] : ['black-field', 'white-field'];
-            row = row.querySelectorAll('.col');
-            for (let [colIndex, col] of row.entries()) {
-                (colIndex % 2 === 0) ? col.classList.add(evenField) : col.classList.add(oddField);
+            // let rookField = document.querySelector(`[data-row="4"][data-col="3"]`);
+            // rookField.insertAdjacentHTML(
+            //         `beforeend`,
+            //         `<div class="figure" data-name="white-queen" data-move="0" draggable="true"></div>`
+            //     );
+            // rookField.classList.remove('empty');
+            // rookField.classList.add(`white-fig-on`);
+        },
 
+        coloringBoard: function () {
+            const board = document.querySelectorAll('div.chess-board .row');
+            for (let [rowIndex, row] of board.entries()) {
+                let [evenField, oddField] = (rowIndex % 2 === 0) ? ['white-field', 'black-field'] : ['black-field', 'white-field'];
+                row = row.querySelectorAll('.col');
+                for (let [colIndex, col] of row.entries()) {
+                    (colIndex % 2 === 0) ? col.classList.add(evenField) : col.classList.add(oddField);
+
+                }
             }
+        },
+        createGame: function () {
+            this.createBoard()
+            this.coloringBoard()
+            this.placingFigures()
         }
     },
 
-    initStepWith: function () {
-        let figures = this.figureValidation();
-        for (let figure of figures) {
-            figure.addEventListener('click', this.initValidStepClick_1);
-        }
+    click: {
+        //choose a figure
+        initStepWith: function () {
+            let figures = game.figureValidation();
+            for (let figure of figures) {
+                figure.addEventListener('click', this.clickInitStepWith);
+            }
+        },
+
+        clickInitStepWith: function (event) {
+            let figure = event.currentTarget;
+            sessionStorage.setItem('currentFigure', figure.dataset.name);
+            let clickedField = event.currentTarget.parentNode;
+            game.stepValidation(figure, clickedField);
+            game.click.removeClickInitStepTo();////////////////////////////////////////////////////
+
+        },
+
+        removeClickInitStepWith: function () {
+            let figures = game.figureValidation();
+            for (let figure of figures) {
+                figure.removeEventListener('click', this.clickInitStepWith);
+            }
+        },
+
+        //make the step and remove all step function etc.
+        initStepTo: function () {
+            let fields = document.querySelectorAll('.valid-step');
+            for (let stepField of fields) {
+                stepField.addEventListener('click', this.clickInitStepTo);
+            }
+        },
+
+        clickInitStepTo: function (event) {
+            let stepField = event.currentTarget;
+            game.click.removeClickInitStepTo();
+            game.step(stepField);
+            console.log('JEEEEEEEE')
+        },
+
+        removeClickInitStepTo: function () {
+            let fields = document.querySelectorAll('.valid-step');
+            console.log(fields)
+            for (let stepField of fields) {
+                stepField.removeEventListener('click', this.clickInitStepTo);
+                game.clearStepFields(stepField);
+                game.click.removeClickInitStepWith();
+            }
+        },
+
     },
 
-    initValidStepClick_1: function (event) {
-        game.clearStepFields(document.querySelectorAll('.col')); // deletes the valid moves
-        let figure = event.currentTarget;
-        figure.setAttribute('data-clicked', 'true');
-        let clickedField = event.currentTarget.parentNode;
-        game.stepValidation(figure, clickedField)
-    },
 
 
-    removeInitStepWith_1: function () {
-        let figures = this.figureValidation();
-        for (let figure of figures) {
-            figure.removeEventListener('click', this.initValidStepClick_1);
-        }
-    },
+    //initStepWith: function () {
+    //    let figures = this.figureValidation();
+    //    for (let figure of figures) {
+    //        figure.addEventListener('click', this.initValidStepClick_1);
+    //    }
+    //},
 
-    initStepTo: function () {
-        this.initRemoveValidMoveClick_2()
-        this.changeFigureDiv()
-        let fields = document.querySelectorAll('.valid-step');
-        // console.log(fields)
-        for (let stepField of fields) {
-            stepField.addEventListener('click', this.initValidMoveClick_2);
-        }
+    //initValidStepClick_1: function (event) {
+    //    game.clearStepFields(document.querySelectorAll('.col')); // deletes the valid moves
+    //    let figure = event.currentTarget;
+    //    figure.setAttribute('data-clicked', 'true');
+    //    let clickedField = event.currentTarget.parentNode;
+    //    game.stepValidation(figure, clickedField)
+    //},
 
-    },
 
-    initValidMoveClick_2: function (event) {
-        debugger;
-        let stepField = event.currentTarget;
-        let fields = document.querySelectorAll('.valid-step');
-        game.step(stepField);
-        game.clearStepFields(fields);
-        console.log('JEEEEEEEE')
+    //removeInitStepWith_1: function () {
+    //    let figures = this.figureValidation();
+    //    for (let figure of figures) {
+    //        figure.removeEventListener('click', this.initValidStepClick_1);
+    //    }
+    //},
 
-        //this.switchPlayer()
-        //this.nextRound()
-    },
+    //initStepTo: function () {
+    //    this.initRemoveValidMoveClick_2()
+    //    this.changeFigureDiv()
+    //    let fields = document.querySelectorAll('.valid-step');
+    //    // console.log(fields)
+    //    for (let stepField of fields) {
+    //        stepField.addEventListener('click', this.initValidMoveClick_2);
+    //    }
 
-    initRemoveValidMoveClick_2: function() {
-        let fields = document.querySelectorAll('.col');
-        console.log(fields)
-        for (let stepField of fields) {
-            stepField.removeEventListener('click', this.initValidMoveClick_2);
-        }
-    },
+    //},
 
-    clearStepFields: function (fields) {
-        for (let field of fields) field.classList.remove('valid-step');
-        this.initRemoveValidMoveClick_2();
-        //for (let field of fields) field.replaceWith(field.cloneNode(true));
+    //initValidMoveClick_2: function (event) {
+    //    let stepField = event.currentTarget;
+    //    let fields = document.querySelectorAll('.valid-step');
+    //    game.step(stepField);
+    //    game.clearStepFields(fields);
+    //    console.log('JEEEEEEEE')
 
+    //    //this.switchPlayer()
+    //    //this.nextRound()
+    //},
+
+    //initRemoveValidMoveClick_2: function() {
+    //    let fields = document.querySelectorAll('.col');
+    //    console.log(fields)
+    //    for (let stepField of fields) {
+    //        stepField.removeEventListener('click', this.initValidMoveClick_2);
+    //        game.clearStepFields(stepField);
+    //    }
+    //},
+
+    clearStepFields: function (field) {
+        field.classList.remove('valid-step');
     },
 
     figureValidation: function () {
@@ -172,7 +230,7 @@ const game = {
     },
 
     stepValidation: function (figure, clickedField) {
-        let figureData = {
+        const figureData = {
             fields: document.querySelectorAll('div.col'),
             range: (figure.dataset.name.includes('black')) ? 'positive' : 'negative',
             type: (figure.dataset.name.includes('black')) ? 'black' : 'white',
@@ -184,21 +242,18 @@ const game = {
         }
         sessionStorage.setItem('stepFromRow', clickedField.dataset.row);
         sessionStorage.setItem('stepFromCol', clickedField.dataset.col);
-        let figureType = figure.dataset.name;
+        let figureName = figure.dataset.name;
 
-        (figureType.includes('king')) ?  this.steps.royalFamily(figureData) :
-        (figureType.includes('queen')) ? this.steps.royalFamily(figureData) :
-        (figureType.includes('rook')) ?  this.steps.rook(figureData) :
-        (figureType.includes('bishop')) ? this.steps.bishop(figureData) :
-        (figureType.includes('knight')) ? this.steps.knight(figureData) :
+        (figureName.includes('king')) ?  this.steps.royalFamily(figureData) :
+        (figureName.includes('queen')) ? this.steps.royalFamily(figureData) :
+        (figureName.includes('rook')) ?  this.steps.rook(figureData) :
+        (figureName.includes('bishop')) ? this.steps.bishop(figureData) :
+        (figureName.includes('knight')) ? this.steps.knight(figureData) :
         this.steps.pawn(figureData);
-        this.initStepTo()
+        this.click.initStepTo();
 
     },
 
-    changeFigureDiv: function () {
-
-    },
 
     steps: {
 
@@ -220,9 +275,7 @@ const game = {
                 }
 
                 function checkValidDirection(coordinate, direction){
-                if (coordinate + direction > 7 || coordinate + direction < 0){
-                    return false;
-                } else {return true}
+                return (!(coordinate + direction > 7 || coordinate + direction < 0))
             }
         },
 
@@ -241,7 +294,7 @@ const game = {
             this.checkAround(clickedRow, clickedCol, +1, -1, figure);
         },
 
-        rook: function (figureData) {
+        'rook': function (figureData) {
             let clickedCol = +figureData.col;
             let clickedRow = +figureData.row;
 
@@ -302,10 +355,11 @@ const game = {
     },
 
     step: function (stepField) {
-        let figure = document.querySelector(`[data-clicked="true"]`);
-        stepField.innerHTML = figure.outerHTML;
-        figure.remove();
-        stepField.querySelector('div').removeAttribute('data-clicked');
+        let currentFigure = sessionStorage.getItem('currentFigure');
+        let figure = document.querySelector(`[data-name=${currentFigure}]`);
+	    let fragment = document.createDocumentFragment();
+	    fragment.appendChild(figure);
+	    stepField.appendChild(fragment);
     },
 
     switchPlayer: function () {
@@ -323,3 +377,5 @@ const game = {
 
 game.init();
 game.play();
+
+
