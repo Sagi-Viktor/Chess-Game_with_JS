@@ -1,9 +1,9 @@
 
 const game = {
     init: function (){
-        this.createBoard()
-        this.coloringBoard()
-        this.placingFigures()
+        game.createBoard()
+        game.coloringBoard()
+        game.placingFigures()
     },
 
     play: function () {
@@ -12,6 +12,7 @@ const game = {
     },
 
     createBoard: function () {
+        game.setHtmlWithPlayers()
         let gameField = document.querySelector('.chess-board');
         for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
             this.createRow(gameField, rowNumber);
@@ -20,6 +21,23 @@ const game = {
                 this.createCol(row, colNumber);
             }
         }
+    },
+
+    setHtmlWithPlayers: function () {
+        const playerOne = document.getElementById('player-1').value
+        const playerTwo = document.getElementById('player-2').value
+        let page = document.querySelector('html')
+        page.innerHTML = '<h1 class="head">The chess game</h1>\n' +
+            '\n' +
+            '    <div>\n' +
+            `        <h3 class="player-name">${playerOne}</h3>\n` +
+            '    </div>\n' +
+            '\n' +
+            '    <div class="chess-board"></div>\n' +
+            '\n' +
+            '    <div>\n' +
+            `        <h3 class="player-name">${playerTwo}</h3>\n` +
+            '    </div>'
     },
 
     createRow: function (gameField, rowNumber) {
@@ -309,17 +327,29 @@ const game = {
     },
 
     switchPlayer: function () {
-        game.removeInitStepWith_1()
         let currentPlayer = document.querySelector('.player');
         let playerNumber = currentPlayer.dataset['player'];
         ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
         currentPlayer.innerHTML = `<h3>${playerNumber}</h3>`
     },
 
+    initPlayerNames: function () {
+        let page = document.querySelector('html')
+        page.innerHTML = '<h1 class="head">The chess game</h1>' +
+            '<div>\n' +
+        '       <input type="text" id="player-1">' +
+            '   <input type="text" id="player-2">' +
+            '   <input type="button" id="player-name-button" value="submit" required minlength="3">' +
+            '</div>'
+        let nameSubmit = document.getElementById('player-name-button')
+        nameSubmit.addEventListener('click', game.init)
+    },
+
+
     nextRound: function () {
         this.play()
     }
 };
 
-game.init();
+game.initPlayerNames()
 game.play();

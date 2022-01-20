@@ -178,3 +178,9 @@ div[data-name*='white-king']{
     width: 64px;
     content: url("../images/white_figures/white_king.png");
 }
+
+.player-name {
+    text-align: center;
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
