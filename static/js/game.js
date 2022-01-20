@@ -125,10 +125,23 @@ const game = {
                 }
             }
         },
+
+        newGameButton: function () {
+            let navBar = document.querySelector('nav#nav');
+            navBar.innerHTML = `
+            <a id="new-game">New Game</a>
+            `
+            let newGameButton = document.querySelector('nav > a#new-game');
+            newGameButton.addEventListener('click', function () {
+                main();
+            });
+        },
+
         createGame: function () {
-            this.createBoard()
-            this.coloringBoard()
-            this.placingFigures()
+            this.newGameButton();
+            this.createBoard();
+            this.coloringBoard();
+            this.placingFigures();
         }
     },
 
@@ -172,10 +185,6 @@ const game = {
             game.step(stepField);
             //matt lépés validátor
             //this.switchPlayer();
-            //
-            //
-            //asdddsssssssssssssssssssssssssssssssssssssssssssssssss
-            //
             console.log('JEEEEEEEE')
         },
 
@@ -190,60 +199,6 @@ const game = {
         },
 
     },
-
-    //initStepWith: function () {
-    //    let figures = this.figureValidation();
-    //    for (let figure of figures) {
-    //        figure.addEventListener('click', this.initValidStepClick_1);
-    //    }
-    //},
-
-    //initValidStepClick_1: function (event) {
-    //    game.clearStepFields(document.querySelectorAll('.col')); // deletes the valid moves
-    //    let figure = event.currentTarget;
-    //    figure.setAttribute('data-clicked', 'true');
-    //    let clickedField = event.currentTarget.parentNode;
-    //    game.stepValidation(figure, clickedField)
-    //},
-
-
-    //removeInitStepWith_1: function () {
-    //    let figures = this.figureValidation();
-    //    for (let figure of figures) {
-    //        figure.removeEventListener('click', this.initValidStepClick_1);
-    //    }
-    //},
-
-    //initStepTo: function () {
-    //    this.initRemoveValidMoveClick_2()
-    //    this.changeFigureDiv()
-    //    let fields = document.querySelectorAll('.valid-step');
-    //    // console.log(fields)
-    //    for (let stepField of fields) {
-    //        stepField.addEventListener('click', this.initValidMoveClick_2);
-    //    }
-
-    //},
-
-    //initValidMoveClick_2: function (event) {
-    //    let stepField = event.currentTarget;
-    //    let fields = document.querySelectorAll('.valid-step');
-    //    game.step(stepField);
-    //    game.clearStepFields(fields);
-    //    console.log('JEEEEEEEE')
-
-    //    //this.switchPlayer()
-    //    //this.nextRound()
-    //},
-
-    //initRemoveValidMoveClick_2: function() {
-    //    let fields = document.querySelectorAll('.col');
-    //    console.log(fields)
-    //    for (let stepField of fields) {
-    //        stepField.removeEventListener('click', this.initValidMoveClick_2);
-    //        game.clearStepFields(stepField);
-    //    }
-    //},
 
     clearStepFields: function (field) {
         field.classList.remove('valid-step');
@@ -422,5 +377,12 @@ const game = {
     }
 };
 
-game.initPlayerNames();
+const main = function () {
+    game.initPlayerNames();
+}
+
+
+
+main();
+
 
