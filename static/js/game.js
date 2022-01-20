@@ -341,9 +341,12 @@ const game = {
     step: function (stepField) {
         let currentFigure = sessionStorage.getItem('currentFigure');
         let figure = document.querySelector(`[data-name=${currentFigure}]`);
+        let figureType = (currentFigure.includes('white')) ? 'white-fig-on' : 'black-fig-on';
+        figure.parentElement.classList.remove(figureType);
 	    let fragment = document.createDocumentFragment();
 	    fragment.appendChild(figure);
 	    stepField.appendChild(fragment);
+        stepField.classList.add(figureType);
     },
 
     switchPlayer: function () {
