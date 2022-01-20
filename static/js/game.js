@@ -2,6 +2,7 @@
 const game = {
     init: function (){
         game.initGame.createGame();
+        game.play();
     },
 
     play: function () {
