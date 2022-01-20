@@ -268,14 +268,19 @@ const game = {
             let clickedRow = +figureData.row;
             let figure;
             (figureData.figure.dataset.name.includes('king')) ? figure = 'king' : figure = 'queen';
+            if (figure==='king') {this.checkSpecialMoves(figure, figureData)}
             let enemy = figureData.enemy;
 
             for (let rowDirection=-1; rowDirection<2; rowDirection++){
                 for (let colDirection=-1; colDirection<2; colDirection++){
-                    if (rowDirection===0 && colDirection===0){break}
+                    if (!rowDirection===0 && colDirection===0) continue;
                     this.checkAround(clickedRow, clickedCol, rowDirection, colDirection, figure, enemy, validateCheck)
                 }
             }
+        },
+
+        checkSpecialMoves:function (figure, figureData){
+
         },
 
         rook: function (figureData, validateCheck) {
@@ -309,9 +314,7 @@ const game = {
 
             // for (let rowDirection=-2; rowDirection<3; rowDirection++){
             //     for (let colDirection=-2; colDirection<3; colDirection++) {
-            //         if (rowDirection===-2 && colDirection===-2){break}
-            //         if (rowDirection===2 && colDirection===2){break}
-            //         if (rowDirection===0 || colDirection===0){break}
+            //         if (rowDirection===colDirection || rowDirection===0 || colDirection===0) continue;
             //         this.checkAround(clickedRow, clickedCol, rowDirection, colDirection, 'knight', enemy, validateCheck)
             //     }
             // }
