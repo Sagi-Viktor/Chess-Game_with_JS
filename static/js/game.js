@@ -11,7 +11,7 @@ const game = {
   
     initGame: {
         createBoard: function () {
-            this.setHtmlWithPlayers()
+            this.setHtmlWithPlayers();
             let gameField = document.querySelector('.chess-board');
             for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
                 this.createRow(gameField, rowNumber);
@@ -19,7 +19,6 @@ const game = {
                 for (let colNumber = 0; colNumber < 8; colNumber++) {
                     this.createCol(row, colNumber);
                 }
-
             }
         },
 
@@ -188,7 +187,6 @@ const game = {
 
         removeClickInitStepTo: function () {
             let fields = document.querySelectorAll('.valid-step');
-            console.log(fields)
             for (let stepField of fields) {
                 stepField.removeEventListener('click', this.clickInitStepTo);
                 game.clearStepFields(stepField);
@@ -255,12 +253,12 @@ const game = {
                     }
                 }
                 function checkValidDirection(coordinate, direction){
-                return (!(coordinate + direction > 7 || coordinate + direction < 0))
+                return (!(coordinate + direction > 7 || coordinate + direction < 0));
             }
         },
 
         isCheck: function (field){
-            return (field.dataset.name.includes('king'))
+            return (field.dataset.name.includes('king'));
         },
 
         royalFamily: function (figureData, validateCheck) {
@@ -295,7 +293,7 @@ const game = {
             let clickedCol = +figureData.col;
             let clickedRow = +figureData.row;
             let figure = 'bishop';
-            let enemy = figureData.enemy
+            let enemy = figureData.enemy;
 
             this.checkAround(clickedRow, clickedCol, +1, +1, figure, enemy, validateCheck);
             this.checkAround(clickedRow, clickedCol, -1, -1, figure, enemy, validateCheck);
@@ -339,6 +337,7 @@ const game = {
     },
 
     step: function (stepField) {
+        game.hit(stepField);
         let currentFigure = sessionStorage.getItem('currentFigure');
         let figure = document.querySelector(`[data-name=${currentFigure}]`);
         let figureType = (currentFigure.includes('white')) ? 'white-fig-on' : 'black-fig-on';
@@ -351,26 +350,33 @@ const game = {
         stepField.classList.remove('empty');
     },
 
+    hit: function (stepField) {
+        if (stepField.children[0]) {
+            console.log(stepField.children[0])
+            stepField.removeChild(stepField.children[0]);
+        }
+    },
+
     switchPlayer: function () {
         let currentPlayer = sessionStorage.getItem('player'), newPlayer;
         (currentPlayer === 'white') ? newPlayer = 'black' : newPlayer =  'white' ;
-        sessionStorage.setItem('player', newPlayer)
+        sessionStorage.setItem('player', newPlayer);
     },
 
     initPlayerNames: function () {
-        let content = document.querySelector('.replace')
+        let content = document.querySelector('.replace');
         content.innerHTML = '<h1 class="head">The chess game</h1>' +
             '<div class="login">\n' +
         '       <input type="text" id="player-1">' +
             '   <input type="text" id="player-2">' +
             '   <input type="button" id="player-name-button" value="submit" required minlength="3">' +
             '</div>'
-        let nameSubmit = document.getElementById('player-name-button')
-        nameSubmit.addEventListener('click', game.init)
+        let nameSubmit = document.getElementById('player-name-button');
+        nameSubmit.addEventListener('click', game.init);
     },
 
     nextRound: function () {
-        game.play()
+        game.play();
     }
 };
 
