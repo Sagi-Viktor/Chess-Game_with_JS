@@ -36,9 +36,6 @@ const game = {
                 '    <div>\n' +
                 `        <h3 class="player-name">${playerOne}</h3>\n` +
                 '    </div>\n' +
-                '\n' +
-                '    <div class="chess-board"></div>\n' +
-                '\n' +
                 '    <div>\n' +
                 `        <h3 class="player-name">${playerTwo}</h3>\n` +
                 '    </div>'
