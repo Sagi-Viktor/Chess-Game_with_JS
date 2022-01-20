@@ -26,12 +26,14 @@ nav {
 
 .head{
     color: #177199;
+    text-align: center;
 }
 
 .chess-board{
     margin: auto auto;
     display: flex;
     flex-direction: column;
+
 }
 
 .row {
@@ -183,4 +185,8 @@ div[data-name*='white-king']{
     text-align: center;
     padding-bottom: 1em;
     padding-top: 1em;
+}
+
+.login{
+    text-align: center;
 }

@@ -1,7 +1,7 @@
 
 const game = {
     init: function (){
-        this.initGame.createGame();
+        game.initGame.createGame();
     },
 
     play: function () {
@@ -10,7 +10,8 @@ const game = {
   
     initGame: {
         createBoard: function () {
-            game.setHtmlWithPlayers()
+            this.setHtmlWithPlayers()
+            // debugger;
             let gameField = document.querySelector('.chess-board');
             for (let rowNumber = 0; rowNumber < 8; rowNumber++) {
                 this.createRow(gameField, rowNumber);
@@ -24,9 +25,10 @@ const game = {
 
 
         setHtmlWithPlayers: function () {
-            const playerOne = document.getElementById('player-1').value
-            const playerTwo = document.getElementById('player-2').value
-            let page = document.querySelector('html')
+            const playerOne = document.getElementById('player-1').value;
+            const playerTwo = document.getElementById('player-2').value;
+            let page = document.querySelector('.replace');
+            sessionStorage.setItem('player', 'playerOne');
             page.innerHTML = '<h1 class="head">The chess game</h1>\n' +
                 '\n' +
                 '    <div>\n' +
@@ -240,8 +242,8 @@ const game = {
     },
 
     figureValidation: function () {
-        let player = document.querySelector(`[data-player]`).dataset.player;
-        let playerColor = (player.includes('2')) ? 'black' : 'white';
+        let player = sessionStorage.getItem('player');
+        let playerColor = (player.includes('Two')) ? 'black' : 'white';
         let figures = document.querySelectorAll(`[data-name *="${playerColor}"]`);
         return figures;
     },
@@ -388,16 +390,16 @@ const game = {
     },
 
     switchPlayer: function () {
-        let currentPlayer = document.querySelector('.player');
-        let playerNumber = currentPlayer.dataset['player'];
-        ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
-        currentPlayer.innerHTML = `<h3>${playerNumber}</h3>`
+        // let currentPlayer = document.querySelector('.player');
+        // let playerNumber = sessionStorage.getItem('player');
+        // ('player-1' === playerNumber) ? playerNumber = 'player-2' : playerNumber = 'player-1';
+        // currentPlayer.innerHTML = `<h3>${playerNumber}</h3>`
     },
 
     initPlayerNames: function () {
-        let page = document.querySelector('html')
+        let page = document.querySelector('.replace')
         page.innerHTML = '<h1 class="head">The chess game</h1>' +
-            '<div>\n' +
+            '<div class="login">\n' +
         '       <input type="text" id="player-1">' +
             '   <input type="text" id="player-2">' +
             '   <input type="button" id="player-name-button" value="submit" required minlength="3">' +

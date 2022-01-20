@@ -1,22 +1,19 @@
-{% extends "layout.html" %}
-
-
-{% block js %}{{ url_for('static', filename='js/game.js') }}{% endblock %}
-{% block css %}{{ url_for('static', filename='css/stylesheet.css') }}{% endblock %}
-{% block title %}Game{% endblock %}
-
-{% block body %}
-    <h1 class="head">The chess game</h1>
-
-    <div>
-        <h3 class="player-name">player-name</h3>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=">
+    <script src="{{ url_for('static', filename='js/game.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
+    <title>Chess-Game</title>
+</head>
+<body>
+<nav id="nav">
+</nav>
+    <div class="replace"></div>
 
     <div class="chess-board"></div>
 
-    <div>
-        <h3 class="player-name">player-name</h3>
-    </div>
 
-{% endblock %}
-
+</body>
+</html>
