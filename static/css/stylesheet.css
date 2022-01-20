@@ -190,3 +190,10 @@ div[data-name*='white-king']{
 .login{
     text-align: center;
 }
+
+.figure-container{
+    padding-inline: 35%;
+    child-align: center;
+    display: flex;
+    flex-direction: row;
+}
