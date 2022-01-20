@@ -208,17 +208,19 @@ const game = {
         },
 
         checkAround: function (firstCoordinate, secCoordinate, rowDirection, direction, figure, enemy){
+            console.log(enemy)
                 if (secCoordinate >= 0 || secCoordinate <= 7){
                     if (checkValidDirection(secCoordinate, direction)) {
                         if (checkValidDirection(firstCoordinate, rowDirection)){
                             let nextField = document.querySelector(`[data-row="${firstCoordinate + rowDirection}"][data-col="${secCoordinate + direction}"]`);
                             if (nextField === null) return;
+                            debugger;
                             if (nextField.classList.contains('empty')) {
                                 nextField.classList.add('valid-step');
                                 if (figure === 'knight' || figure === 'king') return;
                                 this.checkAround(firstCoordinate+rowDirection, secCoordinate + direction, rowDirection, direction);
                             } else if (nextField.classList.contains(enemy)){
-
+                                console.log(enemy)
                             }
                         }
                     }
