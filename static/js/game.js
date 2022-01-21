@@ -29,16 +29,16 @@ const game = {
             let page = document.querySelector('.replace');
             page.innerHTML = '<h1 class="head">The chess game</h1>\n' +
                 '\n' +
-                '    <div>\n' +
-                `        <h3 class="player-name">${playerOne}</h3>\n` +
+                '    <div id="player-name">\n' +
+                `        <p class="player-name" data-player="2" data-actual-player="false">${playerTwo}</p>\n` +
                 '    </div>\n' +
                 '    <div class="black-figure-container figure-container"></div>' +
                 '\n' +
                 '    <div class="chess-board"></div>\n' +
                 '\n' +
                 '    <div class="white-figure-container figure-container"></div>' +
-                '    <div>\n' +
-                `        <h3 class="player-name">${playerTwo}</h3>\n` +
+                '    <div id="player-name">\n' +
+                `        <p class="player-name" data-player="1" data-actual-player="true">${playerOne}</p>\n` +
                 '    </div>'
         },
 
@@ -387,8 +387,14 @@ const game = {
 
     switchPlayer: function () {
         let currentPlayer = sessionStorage.getItem('player'), newPlayer;
-        (currentPlayer === 'white') ? newPlayer = 'black' : newPlayer =  'white' ;
+        const player1NamePlate = document.querySelector('p[data-player="1"]');
+        const player2NamePlate = document.querySelector('p[data-player="2"]');
+        (currentPlayer === 'white') ? newPlayer = 'black'  : newPlayer =  'white' ;
+        let [p1Playing, p2Playing] = (currentPlayer === 'white') ? ['false', 'true' ] : ['true', 'false'];
+        player1NamePlate.setAttribute(`data-actual-player`, `${p1Playing}`);
+        player2NamePlate.setAttribute('data-actual-player', `${p2Playing}`);
         sessionStorage.setItem('player', newPlayer);
+
     },
 
     initPlayerNames: function () {

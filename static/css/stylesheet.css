@@ -1,5 +1,13 @@
 body {
-    background: rgba(134, 98, 3, 0.67);
+    background: url(../images/background.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+a#new-game {
+    cursor: pointer;
 }
 
 nav {
@@ -7,7 +15,7 @@ nav {
     justify-content: space-around;
     font-size: 25px;
     border-radius: 25px;
-    background: rgba(115, 173, 33, 0.36);
+    background: rgba(115, 173, 33, 0.84);
     padding: 20px;
     height: 25px;
 }
@@ -28,8 +36,39 @@ nav {
 }
 
 
+div#player-name {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+p {
+    color: rgb(250, 233, 132);
+    display: inline;
+    font-size: 40px;
+    transition: 1.4s;
+    transition-property: text-shadow;
+}
+ p[data-actual-player='true'] {
+     color: antiquewhite;
+     text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+     font-size: 40px;
+     font-style: italic;
+     display: inline;
+
+     transition: 1.4s;
+     transition-property: text-shadow;
+
+ }
+
+ label {
+     color: white;
+     font-size: large;
+ }
+
 .head{
-    color: #177199;
+    color: white;
+    text-shadow: 4px 4px 8px black, 0 0 25px #ffffff, 0 0 5px #727171;
     text-align: center;
 }
 
@@ -67,16 +106,24 @@ nav {
 }
 
 
-.valid-step {
-    background-color: aqua;
-    transition: 0.2s;
-    transition-property: background-color;
+.valid-step.empty:hover {
+    cursor: pointer;
+    background: #706e6e;
+    transition: 0.3s;
+    transition-property: background;
 }
 
 .valid-step:hover {
-        color: rgb(128, 0, 0);
-    transition: 0.2s;
-    transition-property: color;
+    cursor: pointer;
+    background: #b66d6d;
+    transition: 0.3s;
+    transition-property: background;
+}
+
+.valid-step {
+    background: #989494;
+    transition: 0.3s;
+    transition-property: background;
 }
 
 div[data-name*='black-pawn']{
@@ -185,6 +232,10 @@ div[data-name*='white-king']{
     height: 64px;
     width: 64px;
     content: url("../images/white_figures/white_king.png");
+}
+
+div[data-name] {
+    cursor: pointer;
 }
 
 .player-name {
